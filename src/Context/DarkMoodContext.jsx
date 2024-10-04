@@ -9,6 +9,7 @@ const DarkMoodContext = ({ children }) => {
 
   useEffect(() => {
     localStorage.setItem("theme", changeMood);
+    document.body.className = changeMood === "dark" ? "darkmood" : "";
   }, [changeMood]);
 
   const handleChangeMood = () => {

@@ -19,11 +19,28 @@
   --color-border: lightgray;
   --color-red: red;
 }
-
-.darkmood{
+.darkmood {
   --text-color: white;
   --color-bg: black;
   --color-card: #111111;
+}
+
+.login.darkmood,
+.signup.darkmood,
+form.card.darkmood {
+  background-color: var(--color-bg);
+  color: var(--text-color);
+}
+form.card.darkmood{
+  border: 1px solid var(--color-soft);
+}
+form.card.darkmood span{
+  color: white;
+}
+.darkmood input {
+  background-color: #444;
+  color: white;
+  border: 1px solid var(--color-border);
 }
 
 .container {
@@ -90,24 +107,22 @@ p {
   color: white;
 }
 
-main{
+main {
   display: grid;
   grid-template-columns: 20% 54% 23%;
   gap: 3%;
   width: 100%;
 }
-@media (max-width:1024px) {
-  
-  main{
-    grid-template-columns:8% 56% 32%;
+@media (max-width: 1024px) {
+  main {
+    grid-template-columns: 8% 56% 32%;
   }
 }
-@media (max-width:768px) {
-  
-  main{
-    grid-template-columns:100%;
+@media (max-width: 768px) {
+  main {
+    grid-template-columns: 100%;
   }
-  .container{
+  .container {
     width: 94%;
   }
 }

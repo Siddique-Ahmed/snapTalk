@@ -1,11 +1,14 @@
 import { Link } from "react-router-dom";
 import "./signup.css";
 import google from "../../assets/img/google-logo.png";
+import { useContext } from "react";
+import { moodChangeContext } from "../../Context/DarkMoodContext";
 
 const Login = () => {
+  const { changeMood } = useContext(moodChangeContext);
   return (
-    <div className="signup">
-      <form className="card">
+    <div className={`signup ${changeMood === "dark" ? "darkmood" : ""}`}>
+      <form className={`card ${changeMood === "dark" ? "darkmood" : ""}`}>
         <h2>SnapTalk Signup</h2>
         <input type="text" required placeholder="username" />
         <input type="email" required placeholder="email address" />
