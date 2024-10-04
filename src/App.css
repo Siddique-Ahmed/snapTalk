@@ -109,13 +109,13 @@ p {
 
 main {
   display: grid;
-  grid-template-columns: 20% 54% 23%;
+  grid-template-columns: 20% 51% 23%;
   gap: 3%;
   width: 100%;
 }
 @media (max-width: 1024px) {
   main {
-    grid-template-columns: 8% 56% 32%;
+    grid-template-columns: 8% 54% 32%;
   }
 }
 @media (max-width: 768px) {
