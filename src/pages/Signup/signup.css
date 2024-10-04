@@ -1,72 +1,68 @@
 .signup {
-  background: var(--color-primary);
+  background: #f1f1f1;
   height: 100vh;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 2rem 20px;
 }
 .signup .card {
-  display: flex;
-  flex-direction: row-reverse;
   width: 580px;
-  background-color: #fff;
-  border: 1px solid #fff;
-  border-radius: 2rem;
-  overflow: hidden;
-}
-.signup .card .left {
-  flex: 1;
   display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 30px;
   flex-direction: column;
-  gap: 10px;
-  padding: 20px;
+  background-color: #fff;
+  padding: 2rem 20px;
+  border-radius: 0.6rem;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.065), 0 0 8px rgba(0, 0, 0, 0.065);
 }
-.signup .card h2 {
+.card h2 {
+  font-size: 1.5rem;
   color: var(--color-primary);
 }
-.signup .card p {
-  font-size: 0.9rem;
+.card input {
+  width: 100%;
+  background: var(--color-bg);
+  padding: 1rem 10px;
+  font-size: 15px;
+  color: var(--color-primary);
+  font-weight: normal;
+  border-radius: 4px;
 }
-.signup .card span {
+.card input:focus {
+  box-shadow: 0 0 8px rgba(0,0,0,0.065), 0 0 8px rgba(0,0,0,0.065);
+  color: #000;
+}
+.card input::placeholder {
   color: var(--color-primary);
 }
-.signup .card .right {
-  flex: 1;
-  background: var(--color-primary);
+.card a {
+  width: 80%;
+  text-align: center;
+}
+.card button {
+  width: 80%;
+  padding: 0.9rem 10px;
+  font-size: 16px;
+  font-weight: 600;
+}
+.card span {
+  align-self: flex-start;
+  font-size: 17px;
+}
+.card span a {
+  color: var(--color-primary);
+}
+.card button.google {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
-  gap: 10px;
-  padding: 20px 0;
-}
-.signup form input {
-  padding: 1rem 0;
-  width: 90%;
-  background: transparent;
-  border: transparent;
-  outline: none;
-  border-bottom: 1px solid white;
-  margin: 0 auto;
-  color: #fff;
-}
-.signup form input::placeholder {
-  color: #fff;
-  font-size: 1rem;
-  text-transform: capitalize;
-}
-.signup form .btn {
-  color: var(--color-primary);
-  margin-top: 1rem;
 }
 
-@media (max-width: 600px) {
-  .signup .card {
-    width: 90%;
-    flex-direction: column-reverse;
-  }
-  .signup .card .right {
-    padding: 30px 0;
-  }
+.card button.google img {
+  width: 25px;
+  margin-right: 10px;
 }

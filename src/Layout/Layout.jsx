@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 
 //Pages............
@@ -8,33 +8,27 @@ import ChatBox from "../pages/ChatBox/ChatBox";
 import HomePage from "../pages/HomePage/HomePage";
 import Profile from "../pages/Profile/Profile";
 
-
 //Components.........
 import Nav from "../Components/nav/Nav";
 import LeftBar from "../Components/LeftBar/LeftBar";
 import RightBar from "../Components/RightBar/RightBar";
 
-
-
 const Layout = () => {
-
   //Feed.............
-  const Feed = ()=>{
-    return(
+  const Feed = () => {
+    return (
       <>
-      <Nav/>
-      <main>
-        <LeftBar/>
-        <div className="container">
-          <Outlet/>
-        </div>
-        <RightBar/>
-      </main>
+        <Nav />
+        <main>
+          <LeftBar />
+          <div className="container">
+            <Outlet />
+          </div>
+          <RightBar />
+        </main>
       </>
-    )
-  }
-
-
+    );
+  };
 
   //Router...........
   const router = createBrowserRouter([
@@ -48,21 +42,21 @@ const Layout = () => {
     },
     {
       path: "/",
-      element: <Feed/>,
-      children : [
+      element: <Feed />,
+      children: [
         {
           path: "/",
-          element: <HomePage/>
+          element: <HomePage />,
         },
         {
           path: "/chatbox/:id",
-          element: <ChatBox/>
+          element: <ChatBox />,
         },
         {
           path: "/profile/:id",
-          element: <Profile/>
+          element: <Profile />,
         },
-      ]
+      ],
     },
   ]);
   return (
