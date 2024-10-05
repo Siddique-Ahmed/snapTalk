@@ -1,5 +1,10 @@
-import React, { useContext } from "react";
-import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import {
+  createBrowserRouter,
+  Navigate,
+  Outlet,
+  RouterProvider,
+} from "react-router-dom";
 
 //Pages............
 import Login from "../pages/Login/Login";
@@ -13,8 +18,31 @@ import Nav from "../Components/nav/Nav";
 import LeftBar from "../Components/LeftBar/LeftBar";
 import RightBar from "../Components/RightBar/RightBar";
 
+// Firebase...................
+import { auth } from "../firebaseConfig/Firebase";
+import { onAuthStateChanged } from "firebase/auth";
+
 const Layout = () => {
-  //Feed.............
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+      }
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   const Feed = () => {
     return (
       <>
@@ -42,7 +70,7 @@ const Layout = () => {
     },
     {
       path: "/",
-      element: <Feed />,
+      element: isAuthenticated ? <Feed /> : <Navigate to="/signup" />,
       children: [
         {
           path: "/",
@@ -59,11 +87,8 @@ const Layout = () => {
       ],
     },
   ]);
-  return (
-    <>
-      <RouterProvider router={router} />
-    </>
-  );
+
+  return <RouterProvider router={router} />;
 };
 
 export default Layout;

@@ -1,24 +1,28 @@
 import "./nav.css";
 import { Link } from "react-router-dom";
 
-// FakeApis..........
-import CurrentUser from "../../FackApis/CurrentUserData";
-
 // Components..............
 import DarkMood from "../DarkMood/DarkMood";
 
 // FontAwesome Icons..............
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faBars,
   faBell,
   faEnvelope,
   faHome,
+  faRightToBracket,
   faSearch,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 
 const Nav = () => {
+
+
+  Sign
+
+
+
+
   return (
     <nav>
       <div className="nav-container">
@@ -50,9 +54,9 @@ const Nav = () => {
             <FontAwesomeIcon icon={faBell} />
           </Link>
           <DarkMood />
-          <Link to={"/"}>
-            <FontAwesomeIcon icon={faBars} />
-          </Link>
+          <button onClick={userLogout}>
+            <FontAwesomeIcon icon={faRightToBracket} />
+          </button>
           <div className="user">
             <img
               src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fHByb2ZpbGV8ZW58MHx8MHx8fDA%3D"
