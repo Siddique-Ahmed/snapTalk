@@ -1,5 +1,5 @@
 import "./nav.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // Components..............
 import DarkMood from "../DarkMood/DarkMood";
@@ -14,8 +14,25 @@ import {
   faSearch,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
+import { auth } from "../../firebaseConfig/Firebase";
+import { toast } from "react-toastify";
+import { signOut } from "firebase/auth";
 
 const Nav = () => {
+  const navigate = useNavigate();
+
+  const handleUserLogout = () => {
+    signOut(auth)
+      .then(() => {
+        toast.success("logout successfully");
+        navigate("/login");
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        toast.error(errorMessage);
+      });
+  };
+
   return (
     <nav>
       <div className="nav-container">
@@ -48,7 +65,10 @@ const Nav = () => {
           </Link>
           <DarkMood />
           <Link>
-            <FontAwesomeIcon icon={faRightToBracket} />
+            <FontAwesomeIcon
+              onClick={handleUserLogout}
+              icon={faRightToBracket}
+            />
           </Link>
           <div className="user">
             <img
