@@ -9,8 +9,29 @@ import Watch from "../../assets/icons/4.png";
 import Gallery from "../../assets/icons/5.png";
 import Videos from "../../assets/icons/6.png";
 import Message from "../../assets/icons/7.png";
+import { useEffect, useState } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { auth, db } from "../../firebaseConfig/Firebase";
 
 const LeftBar = () => {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const getDataFromFirebase = async () => {
+      try {
+        const userCollection = collection(db, "users");
+        const querySnapshot = await getDocs(userCollection);
+        querySnapshot.forEach((doc) => {
+          setData(doc.data());
+        });
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    getDataFromFirebase();
+  }, []);
+  console.log(data);
+
   return (
     <div className="leftBar">
       <div className="left-container">
@@ -18,10 +39,10 @@ const LeftBar = () => {
           <Link to={"/profile/id"}>
             <div className="user">
               <img
-                src="https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mjl8fHByb2ZpbGV8ZW58MHx8MHx8fDA%3D"
+                src={auth.currentUser.photoURL}
                 alt=""
               />
-              <h4>Siddique Ahmed</h4>
+              <h4>{data.username}</h4>
             </div>
           </Link>
 

@@ -31,16 +31,15 @@ form.card.darkmood {
   background-color: var(--color-bg);
   color: var(--text-color);
 }
-form.card.darkmood{
+form.card.darkmood {
   border: 1px solid var(--color-soft);
 }
-form.card.darkmood span{
+form.card.darkmood span {
   color: white;
 }
 .darkmood input {
   background-color: #444;
   color: white;
-  border: 1px solid var(--color-border);
 }
 
 .container {

@@ -14,22 +14,48 @@ import {
   faSearch,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import { auth } from "../../firebaseConfig/Firebase";
+import { auth, db } from "../../firebaseConfig/Firebase";
 import { toast } from "react-toastify";
 import { signOut } from "firebase/auth";
+import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
+import { useEffect, useState } from "react";
 
 const Nav = () => {
+  const [data, setData] = useState([]);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const getDataFromFirebase = async () => {
+      try {
+        const userCollection = collection(db, "users");
+        const querySnapshot = await getDocs(userCollection);
+        querySnapshot.forEach((doc) => {
+          setData(doc.data());
+          
+        });
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    getDataFromFirebase();
+  }, []);
+  console.log(data);
+  
   const handleUserLogout = () => {
-    signOut(auth)
+    const userId = auth.currentUser.uid;
+
+    const userRef = doc(db, "users", userId);
+    signOut(auth);
+    toast.success("Logout successfully");
+    navigate("/login");
+    updateDoc(userRef, { isActive: false })
       .then(() => {
-        toast.success("logout successfully");
-        navigate("/login");
+        console.log("Data updated successfully");
       })
       .catch((error) => {
         const errorMessage = error.message;
         toast.error(errorMessage);
+        console.log(errorMessage);
       });
   };
 
@@ -64,19 +90,20 @@ const Nav = () => {
             <FontAwesomeIcon icon={faBell} />
           </Link>
           <DarkMood />
-          <Link>
-            <FontAwesomeIcon
-              onClick={handleUserLogout}
-              icon={faRightToBracket}
-            />
+          <FontAwesomeIcon
+            onClick={handleUserLogout}
+            icon={faRightToBracket}
+            style={{ cursor: "pointer" }}
+          />
+          <Link to={"/profile/id"}>
+            <div className="user">
+              <img
+                src={auth.currentUser.photoURL}
+                alt=""
+              />
+              <h4>{data.username}</h4>
+            </div>
           </Link>
-          <div className="user">
-            <img
-              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fHByb2ZpbGV8ZW58MHx8MHx8fDA%3D"
-              alt=""
-            />
-            <h4>Siddique Ahmed</h4>
-          </div>
         </div>
       </div>
     </nav>

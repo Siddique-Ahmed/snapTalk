@@ -1,18 +1,29 @@
 import { Link, useNavigate } from "react-router-dom";
 import "./signup.css";
 import google from "../../assets/img/google-logo.png";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { moodChangeContext } from "../../Context/DarkMoodContext";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebaseConfig/Firebase";
+import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { auth, db } from "../../firebaseConfig/Firebase";
+import { GoogleAuthProvider } from "firebase/auth";
+import {
+  addDoc,
+  collection,
+  doc,
+  serverTimestamp,
+  setDoc,
+} from "firebase/firestore";
+import dayjs from "dayjs";
+const provider = new GoogleAuthProvider();
 
 const Login = () => {
   const { changeMood } = useContext(moodChangeContext);
   const navigate = useNavigate();
 
-  const createUserAccount = (e) => {
+  // user signup with form //
+  const createUserAccount = async (e) => {
     e.preventDefault();
 
     const username = e.target[0].value;
@@ -24,14 +35,49 @@ const Login = () => {
       return;
     }
 
-    createUserWithEmailAndPassword(auth, userEmail, userPassword)
-      .then(() => {
-        toast.success("account Create Successfully");
+    await createUserWithEmailAndPassword(auth, userEmail, userPassword)
+      .then(async (userCredential) => {
+        const user = userCredential.user;
+        const userObj = {
+          username: username,
+          userEmail: userEmail,
+          isActive: true,
+          provider: "form",
+          lastSeen: serverTimestamp(),
+          createdAt: user.metadata.createdAt,
+        };
+        toast.success("you're loggedin");
         navigate("/");
+        const userRef = collection(db, "users");
+        await addDoc(userRef, userObj);
       })
       .catch((error) => {
-        const errorMessage = error.message;
-        toast.error(errorMessage);
+        toast.error(error.message);
+      });
+  };
+
+  // user signup with google //
+  const signupWithGoogle = () => {
+    signInWithPopup(auth, provider)
+      .then(async (result) => {
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        const user = result.user;
+
+        const userObj = {
+          username: user.displayName,
+          userEmail: user.email,
+          isActive: true,
+          provider: "google",
+          lastSeen: serverTimestamp(),
+        };
+        toast.success("you're logged in");
+        navigate("/");
+        const userRef = doc(db, "users", user.uid);
+        await setDoc(userRef, userObj);
+      })
+      .catch((error) => {
+        toast.error(error.message);
       });
   };
 
@@ -51,9 +97,9 @@ const Login = () => {
         <button type="submit" className="btn btn-primary">
           Signup
         </button>
-        <button type="submit" className="btn google">
+        <div onClick={signupWithGoogle} className="btn google">
           <img src={google} alt="" /> Continue with Google
-        </button>
+        </div>
       </form>
     </div>
   );
