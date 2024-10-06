@@ -9,16 +9,13 @@ import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { auth, db } from "../../firebaseConfig/Firebase";
 import { GoogleAuthProvider } from "firebase/auth";
 import {
-  addDoc,
-  collection,
   doc,
   serverTimestamp,
   setDoc,
 } from "firebase/firestore";
-import dayjs from "dayjs";
 const provider = new GoogleAuthProvider();
 
-const Login = () => {
+const Signup = () => {
   const { changeMood } = useContext(moodChangeContext);
   const navigate = useNavigate();
 
@@ -38,42 +35,18 @@ const Login = () => {
     await createUserWithEmailAndPassword(auth, userEmail, userPassword)
       .then(async (userCredential) => {
         const user = userCredential.user;
+        const userId = user.uid
         const userObj = {
           username: username,
           userEmail: userEmail,
           isActive: true,
           provider: "form",
           lastSeen: serverTimestamp(),
-          createdAt: user.metadata.createdAt,
+          createdAt: serverTimestamp(),
         };
         toast.success("you're loggedin");
         navigate("/");
-        const userRef = collection(db, "users");
-        await addDoc(userRef, userObj);
-      })
-      .catch((error) => {
-        toast.error(error.message);
-      });
-  };
-
-  // user signup with google //
-  const signupWithGoogle = () => {
-    signInWithPopup(auth, provider)
-      .then(async (result) => {
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        const user = result.user;
-
-        const userObj = {
-          username: user.displayName,
-          userEmail: user.email,
-          isActive: true,
-          provider: "google",
-          lastSeen: serverTimestamp(),
-        };
-        toast.success("you're logged in");
-        navigate("/");
-        const userRef = doc(db, "users", user.uid);
+        const userRef = doc(db, "users",userId);
         await setDoc(userRef, userObj);
       })
       .catch((error) => {
@@ -97,7 +70,7 @@ const Login = () => {
         <button type="submit" className="btn btn-primary">
           Signup
         </button>
-        <div onClick={signupWithGoogle} className="btn google">
+        <div className="btn google">
           <img src={google} alt="" /> Continue with Google
         </div>
       </form>
@@ -105,4 +78,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;

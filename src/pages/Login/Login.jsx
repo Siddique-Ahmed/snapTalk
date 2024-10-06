@@ -5,12 +5,11 @@ import { moodChangeContext } from "../../Context/DarkMoodContext";
 import { toast } from "react-toastify";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebaseConfig/Firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, doc, updateDoc } from "firebase/firestore";
 
 const Login = () => {
   const { changeMood } = useContext(moodChangeContext);
   const navigate = useNavigate();
-
 
   // User login with form //
   const handleUserLogin = (e) => {
@@ -20,22 +19,29 @@ const Login = () => {
     const password = e.target[1].value;
 
     signInWithEmailAndPassword(auth, email, password)
-  .then((userCredential) => {
-    const user = userCredential.user;
-    console.log(user);
-    
-    toast.success("you're logged in")
-    navigate("/")
-  })
-  .catch((error) => {
-    const errorMessage = error.message;
-    toast.error(errorMessage)
-  });
+      .then(async (userCredential) => {
+        const user = userCredential.user;
+        console.log(auth);
 
+        const userRef = doc(db, "users", auth.currentUser.uid);
+        console.log(auth.currentUser.uid);
+
+        console.log(userRef.path);
+
+        toast.success("You're logged in");
+        navigate("/");
+
+        updateDoc(userRef, {
+          isActive: true,
+        }).catch((error) => {
+          toast.error("Error updating lastSeen: " + error.message);
+        });
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        toast.error(errorMessage);
+      });
   };
-
-
-
 
   return (
     <div className={`login ${changeMood === "dark" ? "darkmood" : ""}`}>

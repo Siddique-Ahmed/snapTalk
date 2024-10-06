@@ -17,46 +17,52 @@ import {
 import { auth, db } from "../../firebaseConfig/Firebase";
 import { toast } from "react-toastify";
 import { signOut } from "firebase/auth";
-import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
 const Nav = () => {
-  const [data, setData] = useState([]);
+  const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const getDataFromFirebase = async () => {
+      if (!auth.currentUser) {
+        return;
+      }
+
       try {
-        const userCollection = collection(db, "users");
-        const querySnapshot = await getDocs(userCollection);
-        querySnapshot.forEach((doc) => {
-          setData(doc.data());
-          
-        });
+        const userDocRef = doc(db, "users", auth.currentUser.uid); 
+        const userDoc = await getDoc(userDocRef);
+
+        if (userDoc.exists()) {
+          setUserData(userDoc.data());
+        } else {
+          console.log("No such document!");
+        }
       } catch (error) {
         console.log(error.message);
       }
     };
+
     getDataFromFirebase();
   }, []);
-  console.log(data);
-  
-  const handleUserLogout = () => {
-    const userId = auth.currentUser.uid;
 
-    const userRef = doc(db, "users", userId);
-    signOut(auth);
-    toast.success("Logout successfully");
-    navigate("/login");
-    updateDoc(userRef, { isActive: false })
-      .then(() => {
-        console.log("Data updated successfully");
-      })
-      .catch((error) => {
-        const errorMessage = error.message;
-        toast.error(errorMessage);
-        console.log(errorMessage);
-      });
+  const handleUserLogout = async () => {
+    if (!auth.currentUser) {
+      return; // Exit if no user is logged in
+    }
+
+    const userRef = doc(db, "users", auth.currentUser.uid);
+
+    try {
+      await updateDoc(userRef, { isActive: false }); // Update user to inactive
+      await signOut(auth); // Sign out user
+      toast.success("Logout successfully");
+      navigate("/login");
+    } catch (error) {
+      toast.error("Error logging out: " + error.message);
+      console.log(error.message);
+    }
   };
 
   return (
@@ -95,15 +101,14 @@ const Nav = () => {
             icon={faRightToBracket}
             style={{ cursor: "pointer" }}
           />
-          <Link to={"/profile/id"}>
-            <div className="user">
-              <img
-                src={auth.currentUser.photoURL}
-                alt=""
-              />
-              <h4>{data.username}</h4>
-            </div>
-          </Link>
+          {userData && (
+            <Link to={`/profile/${auth.currentUser.uid}`}>
+              <div className="user">
+                <img src={userData.profile} alt="" />
+                <h4>{userData.username}</h4>
+              </div>
+            </Link>
+          )}
         </div>
       </div>
     </nav>

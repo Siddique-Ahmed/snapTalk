@@ -10,7 +10,7 @@ import Gallery from "../../assets/icons/5.png";
 import Videos from "../../assets/icons/6.png";
 import Message from "../../assets/icons/7.png";
 import { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "../../firebaseConfig/Firebase";
 
 const LeftBar = () => {
@@ -18,33 +18,39 @@ const LeftBar = () => {
 
   useEffect(() => {
     const getDataFromFirebase = async () => {
+      if (!auth.currentUser) {
+        return;
+      }
+
       try {
-        const userCollection = collection(db, "users");
-        const querySnapshot = await getDocs(userCollection);
-        querySnapshot.forEach((doc) => {
-          setData(doc.data());
-        });
+        const userDocRef = doc(db, "users", auth.currentUser.uid); 
+        const userDoc = await getDoc(userDocRef);
+
+        if (userDoc.exists()) {
+          setData(userDoc.data());
+        } else {
+          console.log("No such document!");
+        }
       } catch (error) {
         console.log(error.message);
       }
     };
+
     getDataFromFirebase();
   }, []);
-  console.log(data);
 
   return (
     <div className="leftBar">
       <div className="left-container">
         <div className="menu">
+          {data && (
           <Link to={"/profile/id"}>
             <div className="user">
-              <img
-                src={auth.currentUser.photoURL}
-                alt=""
-              />
+              <img src={auth.currentUser.photoURL} alt="" />
               <h4>{data.username}</h4>
             </div>
           </Link>
+          )}
 
           <Link to="/">
             <div className="item">
