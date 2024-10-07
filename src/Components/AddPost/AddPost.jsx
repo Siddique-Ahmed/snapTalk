@@ -1,8 +1,5 @@
 import "./addpost.css";
 
-// FakeApis..................
-import CurrentUser from "../../FackApis/CurrentUserData";
-
 // Firebase Data..................
 import { getDownloadURL, ref, uploadBytes } from "@firebase/storage";
 import { auth, db, storageDB } from "../../firebaseConfig/Firebase";
@@ -15,11 +12,7 @@ import {
   faTags,
   faVideo,
 } from "@fortawesome/free-solid-svg-icons";
-import { addDoc, collection, getDocs, Timestamp } from "firebase/firestore";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
-
-dayjs.extend(relativeTime);
+import { addDoc, collection, Timestamp } from "firebase/firestore";
 
 const AddPost = () => {
   // Post adding data
@@ -31,6 +24,7 @@ const AddPost = () => {
       postphoto: "",
       postvideo: "",
       time: Timestamp.now(),
+      uid : auth.currentUser.uid,
     };
 
     const imgFile = e.target[2].files[0];
@@ -39,29 +33,34 @@ const AddPost = () => {
     if (imgFile || videoFile) {
       // Image upload condition
       if (imgFile) {
-        const imgRef = ref(storageDB, "images/" + imgFile.name);
+        const imgRef = ref(storageDB, `images/${imgFile.name}`);
+        e.target[1].innerHTML = "Posting...";
+        e.target[1].disabled = true;
         try {
           await uploadBytes(imgRef, imgFile);
           userPostObj.postphoto = await getDownloadURL(imgRef);
         } catch (error) {
+          e.target[1].innerHTML = "Post";
+          e.target[1].disabled = false;
           console.log("Image upload error:", error.message);
         }
       }
 
       // Video upload condition
       if (videoFile) {
-        const videoRef = ref(storageDB, "videos/" + videoFile.name);
+        const videoRef = ref(storageDB, `videos/${videoFile.name}`);
+        e.target[1].innerHTML = "Posting...";
+        e.target[1].disabled = true;
         try {
           await uploadBytes(videoRef, videoFile);
           userPostObj.postvideo = await getDownloadURL(videoRef);
         } catch (error) {
+          e.target[1].innerHTML = "Post";
+          e.target[1].disabled = false;
           console.log("Video upload error:", error.message);
         }
       }
-    } else {
-      console.log("No files selected. Only post title will be saved.");
     }
-
     const addPostDataOnDB = async () => {
       console.log(userPostObj);
       const postRef = collection(db, "posts");
@@ -70,6 +69,8 @@ const AddPost = () => {
         const post = await addDoc(postRef, userPostObj);
         console.log("Post added:", post);
       } catch (error) {
+        e.target[1].innerHTML = "Post";
+        e.target[1].disabled = false;
         console.log("Error adding post:", error.message);
       }
     };
@@ -79,6 +80,8 @@ const AddPost = () => {
     e.target[0].value = "";
     e.target[2].value = "";
     e.target[3].value = "";
+    e.target[1].innerHTML = "Post";
+    e.target[1].disabled = false;
   };
 
   return (
