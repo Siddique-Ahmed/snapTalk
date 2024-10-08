@@ -12,19 +12,31 @@ import {
   faTags,
   faVideo,
 } from "@fortawesome/free-solid-svg-icons";
-import { addDoc, collection, Timestamp } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  query,
+  Timestamp,
+  where,
+} from "firebase/firestore";
 
 const AddPost = () => {
   // Post adding data
   const addPostData = async (e) => {
     e.preventDefault();
 
+    const docRef4User = doc(db, "users", auth.currentUser.uid);
+    const getted = getDoc(docRef4User);
+    console.log("getted");
+
     const userPostObj = {
       postTitle: e.target[0].value,
       postphoto: "",
       postvideo: "",
       time: Timestamp.now(),
-      uid : auth.currentUser.uid,
+      uid: auth.currentUser.uid,
     };
 
     const imgFile = e.target[2].files[0];

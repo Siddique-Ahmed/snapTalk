@@ -21,6 +21,7 @@ import RightBar from "../Components/RightBar/RightBar";
 // Firebase...................
 import { auth } from "../firebaseConfig/Firebase";
 import { onAuthStateChanged } from "firebase/auth";
+import EditProfile from "../Components/EditProfile/EditProfile";
 
 const Layout = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -40,7 +41,11 @@ const Layout = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div style={{ textAlign: "center", margin: "45vh 0", fontSize: "35px" }}>
+        Loading...
+      </div>
+    );
   }
 
   const Feed = () => {
@@ -67,6 +72,10 @@ const Layout = () => {
     {
       path: "/signup",
       element: <Signup />,
+    },
+    {
+      path: "/editprofile",
+      element: isAuthenticated ? <EditProfile /> : <Navigate to="/signup"/>,
     },
     {
       path: "/",

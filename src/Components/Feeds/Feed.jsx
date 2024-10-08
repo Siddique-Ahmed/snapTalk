@@ -27,7 +27,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 // Extend relativeTime plugin
 dayjs.extend(relativeTime);
 
-const Feeds = () => {
+const Feed = () => {
   const [postData, setPostData] = useState([]);
 
   useEffect(() => {
@@ -36,96 +36,67 @@ const Feeds = () => {
       const data = [];
       for (const doc of snapshot.docs) {
         const post = doc.data();
-        post.id = doc.id; 
+        post.id = doc.id;
         data.push(post);
       }
-      setPostData(data); 
+      setPostData(data);
     });
 
     return () => unsubscribe();
   }, []);
 
-  return (
-    <div className="feeds">
-      {postData.map((data) => (
-        <Feed data={data} key={data.id} />
-      ))}
-    </div>
-  );
-};
-
-const Feed = ({ data }) => {
-  const [userData, setUserData] = useState({ name: "", profilePic: "" });
-
-  let [openComment, setOpenComment] = useState(false);
-
-  const commentHandler = () => {
-    setOpenComment(!openComment);
-  };
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const userRef = doc(db, "users", data.uid);
-      const userSnap = await getDoc(userRef);
-
-      if (userSnap.exists()) {
-        const userInfo = userSnap.data();
-        setUserData({
-          name: userInfo.username,
-          profilePic: userInfo.profilePic,
-        });
-      }
-    };
-
-    fetchUserData();
-  }, [data.uid]);
-
-  const postTime = dayjs().to(dayjs.unix(data.time.seconds));
-
-  return (
-    <div className="feed" key={data.id}>
-      <div className="top-content">
-        <Link to={`profile/${data.uid}`}>
-          <div className="user">
-            <img
-              src={userData.profilePic || "default-profile-pic-url"}
-              alt=""
-            />
-            <div>
-              <h5>{userData.name || "Unknown User"}</h5>
-              <small>{postTime}</small>
+  const Feed = ({ data }) => {
+    return (
+      <>
+        {data ? (
+          <div className="feed" key={data.id}>
+            <div className="top-content">
+              <Link to={`profile/${data.uid}`}>
+                <div className="user">
+                  <img src={img} alt="" />
+                  <div>
+                    <h5>{userData.name || "Unknown User"}</h5>
+                    <small>{postTime}</small>
+                  </div>
+                </div>
+              </Link>
+              <span>
+                <FontAwesomeIcon icon={faListDots} />
+              </span>
             </div>
+            <div className="mid-content">
+              <p>{data.postTitle ? data.postTitle : null}</p>
+              {data.postphoto ? (
+                <img src={data.postphoto} alt="" />
+              ) : data.postvideo ? (
+                <video src={data.postvideo} alt="" autoPlay />
+              ) : null}
+            </div>
+            <div className="bottom-content">
+              <div className="action-item">
+                <span>
+                  <FontAwesomeIcon icon={faHeart} /> 14 Like
+                </span>
+              </div>
+              <div className="action-item" onClick={commentHandler}>
+                <span>
+                  <FontAwesomeIcon icon={faComment} /> 23 Comment
+                </span>
+              </div>
+              <div className="action-item">
+                <span>
+                  <FontAwesomeIcon icon={faShare} /> 2 Share
+                </span>
+              </div>
+            </div>
+            {openComment && <Comments />}
           </div>
-        </Link>
-        <span>
-          <FontAwesomeIcon icon={faListDots} />
-        </span>
-      </div>
-      <div className="mid-content">
-        <p>{data.postTitle}</p>
-        {data.postphoto || data.postvideo ? }
-        <img src={data.postphoto} alt="" />
-      </div>
-      <div className="bottom-content">
-        <div className="action-item">
-          <span>
-            <FontAwesomeIcon icon={faHeart} /> 14 Like
-          </span>
-        </div>
-        <div className="action-item" onClick={commentHandler}>
-          <span>
-            <FontAwesomeIcon icon={faComment} /> 23 Comment
-          </span>
-        </div>
-        <div className="action-item">
-          <span>
-            <FontAwesomeIcon icon={faShare} /> 2 Share
-          </span>
-        </div>
-      </div>
-      {openComment && <Comments />}
-    </div>
-  );
+        ) : (
+          <p>post not avialable</p>
+        )}
+      </>
+    );
+  };
 };
 
-export default Feeds;
+export default Feed;

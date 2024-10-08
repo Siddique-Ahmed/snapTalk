@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 
 // FontAwesome Icon............
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFeed, faLink, faMessage } from "@fortawesome/free-solid-svg-icons";
+import { faFeed, faMessage } from "@fortawesome/free-solid-svg-icons";
 import { doc, getDoc } from "firebase/firestore";
 
 const UserProfile = () => {
@@ -63,9 +63,9 @@ const UserProfile = () => {
               <button className="btn btn-primary">
                 <FontAwesomeIcon icon={faFeed} /> Follow Me
               </button>
-              <button className="btn">
-                <FontAwesomeIcon icon={faLink} />
-              </button>
+              <Link to={"/editProfile"}>
+              <button className="btn">Edit Profile</button>
+              </Link>
             </div>
             <p className="bio">
               Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sint

@@ -4,37 +4,37 @@ import "./feeds.css";
 import Feed from "./Feed";
 
 // Firebase Data.................
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebaseConfig/Firebase";
 import { useEffect, useState } from "react";
 
 const Feeds = () => {
-  const [postData, setPostData] = useState([]);
+
+  const [getPosts, setGetPosts] = useState([])
+  const arr = []
+
+  const getPostsFunc = async() => {
+    const postsColection  = collection(db, 'posts')
+    const querySnapshot = await getDocs(postsColection);
+    querySnapshot.forEach((doc) => {
+      if(arr.length < querySnapshot.size){
+        arr.push(doc.data())
+      }
+    });
+    setGetPosts(arr)
+  }
 
   useEffect(() => {
-    const getPostData = async () => {
-      const data = [];
-      const postCollection = collection(db, "posts");
-      try {
-        const querySnapshot = await getDocs(postCollection);
-        querySnapshot.forEach((doc) => {
-          data.push(doc.data());
-        });
-        setPostData(data); 
-        console.log("Post data:", postData);
-      } catch (error) {
-        console.log(error.message);
-      }
-    };
-    getPostData();
-  }, []);
-  
+    getPostsFunc()
+  },[])
 
   return (
     <div className="feeds">
-      {postData.map((data) => (
-        <Feed data={data} key={data.uid} />
-      ))}
+      {getPosts.length > 0 ? (
+        getPosts.map((data,index) => <Feed data={data} key={index} />)
+      ) : (
+        <p> no post avialable</p>
+      )}
     </div>
   );
 };
