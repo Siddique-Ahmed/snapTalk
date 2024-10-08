@@ -17,7 +17,10 @@ const Login = () => {
     console.log(e);
     const email = e.target[0].value;
     const password = e.target[1].value;
+    const loginButton = e.target[2];
 
+    loginButton.innerHTML = "Loading...";
+    loginButton.disabled = true;
     signInWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         const user = userCredential.user;
@@ -27,15 +30,12 @@ const Login = () => {
         console.log(auth.currentUser.uid);
 
         console.log(userRef.path);
-
+        loginButton.innerHTML = "Login";
+        loginButton.disabled = false;
         toast.success("You're logged in");
         navigate("/");
 
-        updateDoc(userRef, {
-          isActive: true,
-        }).catch((error) => {
-          toast.error("Error updating lastSeen: " + error.message);
-        });
+        updateDoc(userRef, { isActive: true });
       })
       .catch((error) => {
         const errorMessage = error.message;
