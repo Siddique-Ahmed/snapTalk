@@ -49,14 +49,14 @@ const Nav = () => {
 
   const handleUserLogout = async () => {
     if (!auth.currentUser) {
-      return; // Exit if no user is logged in
+      return; 
     }
 
     const userRef = doc(db, "users", auth.currentUser.uid);
 
     try {
-      await updateDoc(userRef, { isActive: false }); // Update user to inactive
-      await signOut(auth); // Sign out user
+      await updateDoc(userRef, { isActive: false }); 
+      await signOut(auth); 
       toast.success("Logout successfully");
       navigate("/login");
     } catch (error) {
@@ -104,8 +104,8 @@ const Nav = () => {
           {userData && (
             <Link to={`/profile/${auth.currentUser.uid}`}>
               <div className="user">
-                <img src={userData.profile} alt="" />
-                <h4>{userData.username}</h4>
+                <img src={userData.userProfile} alt="" />
+                <h4>{userData.fullName}</h4>
               </div>
             </Link>
           )}

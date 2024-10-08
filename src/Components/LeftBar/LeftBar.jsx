@@ -46,8 +46,8 @@ const LeftBar = () => {
           {data && (
           <Link to={"/profile/id"}>
             <div className="user">
-              <img src={auth.currentUser.photoURL} alt="" />
-              <h4>{data.username}</h4>
+              <img src={data.userProfile} alt="" />
+              <h4>{data.fullName}</h4>
             </div>
           </Link>
           )}
