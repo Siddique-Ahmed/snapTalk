@@ -17,6 +17,7 @@ const EditProfile = () => {
     const bio = e.target[2].value;
     const userProfile = e.target[3].files[0].name;
     const userBackgroundImg = e.target[4].files[0].name;
+    const updateButton = e.target[5];
 
     const userEditData = {
       fullName: fullName,
@@ -25,7 +26,8 @@ const EditProfile = () => {
       userProfile: "",
       userBackgroundImg: "",
     };
-
+    updateButton.innerHTML = "Uploading...";
+    updateButton.disabled = true;
     const userBGRef = ref(storageDB, `bgImages/${userProfile}`);
     try {
       uploadBytes(userBGRef, e.target[3].files[0].name).then(() => {
@@ -44,11 +46,15 @@ const EditProfile = () => {
             });
           } catch (error) {
             toast.error(error.message);
+            updateButton.innerHTML = "uploade Profile";
+updateButton.disabled = false;
           }
         });
       });
     } catch (error) {
       toast.error(error.message);
+      updateButton.innerHTML = "upload Profile";
+updateButton.disabled = false;
     }
 
     // add edit profile data in firebase db //
@@ -56,7 +62,9 @@ const EditProfile = () => {
       const docRef = doc(db, "users", auth.currentUser.uid);
       await updateDoc(docRef, userEditData);
       toast.success("Profile Updated");
-      navigate("/")
+      updateButton.innerHTML = "Upload Profile";
+      updateButton.disabled = false;
+      navigate("/");
     };
   };
 
@@ -94,7 +102,7 @@ const EditProfile = () => {
             Skip
           </div>
           <button type="submit" className="btn btn-primary">
-            Update Profile
+            Updat Profile
           </button>
         </div>
       </form>
