@@ -34,8 +34,6 @@ const EditProfile = () => {
     const fullName = e.target[0].value;
     const username = e.target[1].value;
     const bio = e.target[2].value;
-    const userProfile = e.target[3].files[0].name;
-    const userBackgroundImg = e.target[4].files[0].name;
     const updateButton = e.target[5];
 
     const userEditData = {
@@ -53,19 +51,19 @@ const EditProfile = () => {
     };
     updateButton.innerHTML = "Uploading...";
     updateButton.disabled = true;
-    const userBGRef = ref(storageDB, `bgImages/${userProfile}`);
+    const userBGRef = ref(storageDB, `bgImages/${e.target[4].files[0].name}`);
     try {
-      uploadBytes(userBGRef, e.target[3].files[0].name).then(() => {
+      uploadBytes(userBGRef, e.target[4].files[0]).then(() => {
         getDownloadURL(userBGRef).then((url) => {
-          userEditData.userProfile = url;
+          userEditData.userBackgroundImg = url;
           const userProfileRef = ref(
             storageDB,
-            `profileImages/${userBackgroundImg}`
+            `profileImages/${e.target[3].files[0].name}`
           );
           try {
-            uploadBytes(userProfileRef, e.target[4].files[0].name).then(() => {
+            uploadBytes(userProfileRef, e.target[3].files[0]).then(() => {
               getDownloadURL(userProfileRef).then((url) => {
-                userEditData.userBackgroundImg = url;
+                userEditData.userProfile = url;
                 addEditDataToDB();
               });
             });
@@ -99,7 +97,7 @@ const EditProfile = () => {
         <h1>Edit Profile</h1>
         <div className="input-box">
           <label htmlFor="name">Full Name</label>
-          <input type="text" id="name" placeholder="Name"  />
+          <input type="text" id="name" placeholder="Name" />
         </div>
         <div className="input-box">
           <label htmlFor="username">username</label>

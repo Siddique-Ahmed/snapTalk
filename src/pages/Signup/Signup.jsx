@@ -43,6 +43,7 @@ const Signup = () => {
           userBackgroundImg: "",
           username: username,
           bio: "",
+          isFollow: false,
         };
 
         try {

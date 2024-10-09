@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 
 // FontAwesome Icon............
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFeed, faMessage } from "@fortawesome/free-solid-svg-icons";
+import { faFeed, faLink, faMessage } from "@fortawesome/free-solid-svg-icons";
 import { doc, getDoc } from "firebase/firestore";
 
 const UserProfile = () => {
@@ -18,24 +18,16 @@ const UserProfile = () => {
       if (!auth.currentUser) {
         return;
       }
-
       try {
         const userDocRef = doc(db, "users", auth.currentUser.uid);
         const userDoc = await getDoc(userDocRef);
-        
-
         if (userDoc.exists()) {
           setData(userDoc.data());
-          console.log(data);
-          
-        } else {
-          console.log("No such document!");
         }
       } catch (error) {
         console.log(error.message);
       }
     };
-
     getDataFromFirebase();
   }, []);
 
@@ -44,10 +36,7 @@ const UserProfile = () => {
       {data && (
         <>
           <div className="cover-photos">
-            <img
-              src={data.userBackgroundImg}
-              alt=""
-            />
+            <img src={data.userBackgroundImg} alt="" />
           </div>
           <div className="profile-info">
             <img src={data.userProfile} alt="" />
@@ -61,12 +50,18 @@ const UserProfile = () => {
                   <FontAwesomeIcon icon={faMessage} />
                 </button>
               </Link>
-              <button className="btn btn-primary">
-                <FontAwesomeIcon icon={faFeed} /> Follow Me
+              {data.userId ? (
+                <Link to={"/editProfile"}>
+                  <button className="btn">Edit Profile</button>
+                </Link>
+              ) : (
+                <button className="btn btn-primary">
+                  <FontAwesomeIcon icon={faFeed} /> Follow Me
+                </button>
+              )}
+              <button className="btn">
+                <FontAwesomeIcon icon={faLink}/>
               </button>
-              <Link to={"/editProfile"}>
-              <button className="btn">Edit Profile</button>
-              </Link>
             </div>
             <p className="bio">{data.bio}</p>
           </div>

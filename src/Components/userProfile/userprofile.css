@@ -1,9 +1,9 @@
 .userProfile .cover-photos {
-  height: 200px;
+  height: 250px;
   aspect-ratio: 1/1;
   width: 100%;
   overflow: hidden;
-  margin-top: 3.6rem;
+  margin-top: 1.6rem;
 }
 .profile-info {
   width: 90%;
