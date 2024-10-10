@@ -1,39 +1,34 @@
 import "./feeds.css";
-
-// Components...............
 import Feed from "./Feed";
-
-// Firebase Data.................
-import { collection, getDocs, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebaseConfig/Firebase";
 import { useEffect, useState } from "react";
 
 const Feeds = () => {
-
-  const [getPosts, setGetPosts] = useState([])
-  const arr = []
-
-  const getPostsFunc = async() => {
-    const postsColection  = collection(db, 'posts')
-    const querySnapshot = await getDocs(postsColection);
-    querySnapshot.forEach((doc) => {
-      if(arr.length < querySnapshot.size){
-        arr.push(doc.data())
-      }
-    });
-    setGetPosts(arr)
-  }
+  const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    getPostsFunc()
-  },[])
+    const postsCollection = collection(db, "posts");
+
+    // Realtime listener using onSnapshot
+    const unsubscribe = onSnapshot(postsCollection, (snapshot) => {
+      const postsData = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setPosts(postsData);
+    });
+
+    // Cleanup listener on unmount
+    return () => unsubscribe();
+  }, []);
 
   return (
     <div className="feeds">
-      {getPosts.length > 0 ? (
-        getPosts.map((data,index) => <Feed data={data} key={index} />)
+      {posts.length > 0 ? (
+        posts.map((post, index) => <Feed data={post} key={index} />)
       ) : (
-        <p> no post avialable</p>
+        <p>No posts available</p>
       )}
     </div>
   );

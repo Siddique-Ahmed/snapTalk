@@ -1,5 +1,7 @@
 import "./userprofile.css";
 import { Link } from "react-router-dom";
+import userLogo from "../../../public/img/user-dp.jpeg";
+import bgCover from "../../../public/img/bg-cover.png";
 
 // Firebase Data....................
 import { auth, db } from "../../firebaseConfig/Firebase";
@@ -36,10 +38,10 @@ const UserProfile = () => {
       {data && (
         <>
           <div className="cover-photos">
-            <img src={data.userBackgroundImg} alt="" />
+            <img src={data.userBackgroundImg ? data.userBackgroundImg : bgCover} alt="" />
           </div>
           <div className="profile-info">
-            <img src={data.userProfile} alt="" />
+            <img src={data.userProfile ? data.userProfile : userLogo} alt="" />
             <div className="user-name">
               <h3>{data.fullName}</h3>
               <h5>{data.username}</h5>
@@ -59,8 +61,8 @@ const UserProfile = () => {
                   <FontAwesomeIcon icon={faFeed} /> Follow Me
                 </button>
               )}
-              <button className="btn">
-                <FontAwesomeIcon icon={faLink}/>
+              <button className="btn btn-primary">
+                <FontAwesomeIcon icon={faLink} />
               </button>
             </div>
             <p className="bio">{data.bio}</p>

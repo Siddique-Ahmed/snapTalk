@@ -1,4 +1,4 @@
-import "./feeds.css";
+import "./profileFeed.css";
 import { Link } from "react-router-dom";
 import Comments from "../Comments/Comments";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,11 +15,8 @@ import { auth } from "../../firebaseConfig/Firebase";
 
 dayjs.extend(relativeTime);
 
-const Feed = ({ data }) => {
+const ProfileFeed = ({ data }) => {
   const [openComment, setOpenComment] = useState(false);
-
-  const postTime = data.postTime ? dayjs(data.postTime.toDate()).fromNow() : "Unknown time";
-
 
   const commentHandler = () => {
     setOpenComment(!openComment);
@@ -28,9 +25,9 @@ const Feed = ({ data }) => {
   return (
     <>
       {data ? (
-        <div className="feed" key={data.id}>
+        <div className="feed" >
           <div className="top-content">
-            <Link to={`profile/${data.userId}`}>
+            <Link to={`profile/`}>
               <div className="user">
                 <img src={data.userProfile} alt="" />
                 <div>
@@ -86,4 +83,4 @@ const Feed = ({ data }) => {
   );
 };
 
-export default Feed;
+export default ProfileFeed;

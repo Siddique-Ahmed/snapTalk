@@ -5,12 +5,13 @@ import { auth, db, storageDB } from "../../firebaseConfig/Firebase";
 import { toast } from "react-toastify";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-
+// import {} from "history"
 const EditProfile = () => {
   const [existUsername, setExistUsername] = useState("");
   const [existBio, setExistBio] = useState("");
   const [existFullName, setExistFullName] = useState("");
   const navigate = useNavigate();
+  
 
   // getDataFromFirebase //
   useEffect(() => {
@@ -30,7 +31,6 @@ const EditProfile = () => {
 
   const editUserProfile = (e) => {
     e.preventDefault();
-    console.log(existUsername);
     const fullName = e.target[0].value;
     const username = e.target[1].value;
     const bio = e.target[2].value;
@@ -125,7 +125,7 @@ const EditProfile = () => {
             Skip
           </div>
           <button type="submit" className="btn btn-primary">
-            Updat Profile
+            Update Profile
           </button>
         </div>
       </form>

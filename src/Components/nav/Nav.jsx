@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 // Components..............
 import DarkMood from "../DarkMood/DarkMood";
+import userLogo from "../../../public/img/user-dp.jpeg";
 
 // FontAwesome Icons..............
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -31,7 +32,7 @@ const Nav = () => {
       }
 
       try {
-        const userDocRef = doc(db, "users", auth.currentUser.uid); 
+        const userDocRef = doc(db, "users", auth.currentUser.uid);
         const userDoc = await getDoc(userDocRef);
 
         if (userDoc.exists()) {
@@ -49,14 +50,14 @@ const Nav = () => {
 
   const handleUserLogout = async () => {
     if (!auth.currentUser) {
-      return; 
+      return;
     }
 
     const userRef = doc(db, "users", auth.currentUser.uid);
 
     try {
-      await updateDoc(userRef, { isActive: false }); 
-      await signOut(auth); 
+      await updateDoc(userRef, { isActive: false });
+      await signOut(auth);
       toast.success("Logout successfully");
       navigate("/login");
     } catch (error) {
@@ -104,7 +105,10 @@ const Nav = () => {
           {userData && (
             <Link to={`/profile/${auth.currentUser.uid}`}>
               <div className="user">
-                <img src={userData.userProfile} alt="" />
+                <img
+                  src={userData.userProfile ? userData.userProfile : userLogo}
+                  alt=""
+                />
                 <h4>{userData.fullName}</h4>
               </div>
             </Link>

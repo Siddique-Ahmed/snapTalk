@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import "./leftBar.css";
+import userLogo from "../../../public/img/user-dp.jpeg";
 
 // Icon Images................
 import Friend from "../../assets/icons/1.png";
@@ -46,7 +47,7 @@ const LeftBar = () => {
           {data && (
           <Link to={"/profile/id"}>
             <div className="user">
-              <img src={data.userProfile} alt="" />
+              <img src={data.userProfile ? data.userProfile : userLogo} alt="" />
               <h4>{data.fullName}</h4>
             </div>
           </Link>

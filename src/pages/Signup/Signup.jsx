@@ -15,7 +15,7 @@ const Signup = () => {
   const { changeMood } = useContext(moodChangeContext);
   const navigate = useNavigate();
 
-  // creating user account with form //
+  // create user account with form //
   const createUserAccount = (e) => {
     e.preventDefault();
 
@@ -23,7 +23,7 @@ const Signup = () => {
     const userEmail = e.target[1].value;
     const userpassword = e.target[2].value;
     const signupButton = e.target[3];
-    signupButton.innerHTML = "Submiting...";
+    signupButton.innerHTML = "Loading...";
     signupButton.disabled = true;
 
     // signup with email and password //
@@ -61,6 +61,45 @@ const Signup = () => {
       });
   };
 
+  // create user with Google //
+  const createUserAccountWithGoogle = () => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        const user = result.user;
+        const googleRef = doc(db, "users", user.uid);
+        console.log(user);
+        const userObj = {
+          fullName: user.displayName,
+          userEmail: user.email,
+          isActive: true,
+          provider: "google",
+          userId: user.uid,
+          createdAt: serverTimestamp(),
+          lasSeen: serverTimestamp(),
+          userProfile: "",
+          userBackgroundImg: "",
+          username: "",
+          bio: "",
+          isFollow: false,
+        };
+        try {
+          toast.success("account created successfully!");
+          navigate("/editprofile");
+          setDoc(googleRef, userObj);
+        } catch (error) {
+          toast.error(error.message);
+        }
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        const email = error.customData.email;
+        const credential = GoogleAuthProvider.credentialFromError(error);
+      });
+  };
+
   return (
     <div className={`signup ${changeMood === "dark" ? "darkmood" : ""}`}>
       <form
@@ -77,7 +116,7 @@ const Signup = () => {
         <button type="submit" className="btn btn-primary">
           Signup
         </button>
-        <div className="btn google">
+        <div onClick={createUserAccountWithGoogle} className="google">
           <img src={google} alt="" /> Continue with Google
         </div>
       </form>

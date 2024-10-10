@@ -20,7 +20,7 @@
 .feed p {
   margin-bottom: 1rem;
 }
-.feed .mid-content{
+.feed .mid-content {
   width: 100%;
   display: flex;
   flex-direction: column;
