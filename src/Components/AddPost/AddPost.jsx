@@ -1,4 +1,5 @@
 import "./addpost.css";
+import usericon from "../../../public/img/user-dp.jpeg";
 
 // Firebase Data..................
 import { auth, db, storageDB } from "../../firebaseConfig/Firebase";
@@ -48,13 +49,15 @@ const AddPost = () => {
     e.preventDefault();
 
     const postTitle = e.target[0].value;
+    const postButton = e.target[1];
     const postImage = e.target[2].files[0];
     const postVideo = e.target[3].files[0];
     const bytes = 5 * 1024 * 1024;
 
     let setImg = null;
     let setVideo = null;
-
+    postButton.innerHTML = "posting...";
+    postButton.disabled = true;
     // Check if video is provided, and validate
     if (postVideo) {
       if (postVideo.type.startsWith("video/") && postVideo.size <= bytes) {
@@ -113,6 +116,8 @@ const AddPost = () => {
 
       // Add post to Firestore database
       await addDoc(collection(db, "posts"), postObj);
+      postButton.innerHTML = "post";
+      postButton.disabled = false;
       toast.success("Post added successfully!");
     } catch (error) {
       toast.error("Error uploading post: " + error.message);
@@ -125,7 +130,7 @@ const AddPost = () => {
   return (
     <form onSubmit={(e) => addPostInFirebase(e)} className="postForm">
       <div className="user form-top">
-        <img src={data ? data.userProfile : ""} alt="" />
+        <img src={data?.userProfile ? data.userProfile : usericon} alt="" />
         <input type="text" placeholder="What's on your mind?" required />
         <button type="submit" className="btn btn-primary">
           Post

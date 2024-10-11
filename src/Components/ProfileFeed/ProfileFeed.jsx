@@ -10,31 +10,39 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { auth } from "../../firebaseConfig/Firebase";
+import usericon from "../../../public/img/user-dp.jpeg";
 
 dayjs.extend(relativeTime);
 
-const ProfileFeed = ({ data }) => {
+const ProfileFeed = ({ postData }) => {
   const [openComment, setOpenComment] = useState(false);
 
   const commentHandler = () => {
     setOpenComment(!openComment);
   };
 
+  const postTime = postData.postTime
+    ? dayjs(postData.postTime.toDate()).fromNow()
+    : "Unknown time";
+
   return (
     <>
-      {data ? (
-        <div className="feed" >
+      {postData ? (
+        <div className="feed">
           <div className="top-content">
-            <Link to={`profile/`}>
+            <Link to={`profile/${postData.userId}`}>
               <div className="user">
-                <img src={data.userProfile} alt="" />
+                <img
+                  src={postData.userProfile ? postData.userProfile : usericon}
+                  alt=""
+                />
                 <div>
                   <h5>
-                    {data?.fullName ||
-                      auth.currentUser?.displayName ||
-                      "Unknown User"}
+                    {postData.fullName
+                      ? postData.fullName
+                      : auth.currentUser?.displayName || "Unknown User"}
                   </h5>
                   <small>{postTime}</small>
                 </div>
@@ -45,11 +53,14 @@ const ProfileFeed = ({ data }) => {
             </span>
           </div>
           <div className="mid-content">
-            <p>{data.title ? data.title : null}</p>
-            {data.img && <img src={data.img} alt="post image" />}
-            {data.video && (
+            <p>{postData.title ? postData.title : null}</p>
+            {postData.img && (
+              <img src={postData.img ? postData.img : null} alt="post image" />
+            )}
+
+            {postData.video && (
               <video
-                src={data.video}
+                src={postData.video ? postData.video : null}
                 alt="post video"
                 autoPlay
                 controls
