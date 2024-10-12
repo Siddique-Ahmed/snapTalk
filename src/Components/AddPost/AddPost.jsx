@@ -93,6 +93,7 @@ const AddPost = () => {
       userId: auth.currentUser.uid,
       userProfile: data.userProfile,
       fullName: data.fullName,
+      
     };
 
     try {

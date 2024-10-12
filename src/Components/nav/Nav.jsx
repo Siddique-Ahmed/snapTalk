@@ -81,10 +81,9 @@ const Nav = () => {
           <Link to={"/profile/id"}>
             <FontAwesomeIcon icon={faUser} />
           </Link>
-          <div className="Nav-searchBar">
+          <Link to={"/searchuser"}>
             <FontAwesomeIcon icon={faSearch} />
-            <input type="search" placeholder="Find Friends" />
-          </div>
+          </Link>
         </div>
 
         {/*........................NavArea Right.........................*/}

@@ -17,12 +17,18 @@ dayjs.extend(relativeTime);
 
 const Feed = ({ data }) => {
   const [openComment, setOpenComment] = useState(false);
+  const [like, setLike] = useState(0);
 
-  const postTime = data.postTime ? dayjs(data.postTime.toDate()).fromNow() : "Unknown time";
-
+  const postTime = data.postTime
+    ? dayjs(data.postTime.toDate()).fromNow()
+    : "Unknown time";
 
   const commentHandler = () => {
     setOpenComment(!openComment);
+  };
+
+  const likeCounter = () => {
+    setLike((like) => (like <= 0 ? like + 1 : like - 1));
   };
 
   return (
@@ -34,11 +40,7 @@ const Feed = ({ data }) => {
               <div className="user">
                 <img src={data.userProfile} alt="" />
                 <div>
-                  <h5>
-                    {data?.fullName ||
-                      auth.currentUser?.displayName ||
-                      "Unknown User"}
-                  </h5>
+                  <h5>{data.fullName ? data.fullName : "Unknown User"}</h5>
                   <small>{postTime}</small>
                 </div>
               </div>
@@ -62,8 +64,8 @@ const Feed = ({ data }) => {
           </div>
           <div className="bottom-content">
             <div className="action-item">
-              <span>
-                <FontAwesomeIcon icon={faHeart} /> 14 Like
+              <span onClick={likeCounter}>
+                <FontAwesomeIcon style={{color : `${like === 1 ? "red": ""}` }} icon={faHeart} /> {like} Like
               </span>
             </div>
             <div className="action-item" onClick={commentHandler}>

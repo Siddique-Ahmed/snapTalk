@@ -30,18 +30,6 @@ nav {
   font-size: 1.6rem;
   font-weight: 400;
 }
-.Nav-searchBar {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  border: 1px solid var(--color-border);
-  border-radius: 2rem;
-  padding: 5px 10px;
-}
-.Nav-searchBar input {
-  background: transparent;
-  color: var(--color-primary);
-}
 .nav-right {
   display: flex;
   align-items: center;
@@ -58,13 +46,6 @@ nav {
   }
   .nav-container .logo {
     font-size: 1.3rem;
-  }
-  .Nav-searchBar {
-    border: none;
-    padding: 0;
-  }
-  .Nav-searchBar input {
-    display: none;
   }
   .nav-left,.nav-right{
     gap: 20px;

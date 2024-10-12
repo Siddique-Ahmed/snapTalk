@@ -40,9 +40,7 @@ const ProfileFeed = ({ postData }) => {
                 />
                 <div>
                   <h5>
-                    {postData.fullName
-                      ? postData.fullName
-                      : auth.currentUser?.displayName || "Unknown User"}
+                    {postData.fullName ? postData.fullName : "Unknown User"}
                   </h5>
                   <small>{postTime}</small>
                 </div>

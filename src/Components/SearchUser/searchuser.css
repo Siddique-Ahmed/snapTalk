@@ -1,0 +1,95 @@
+/* Container */
+.user-content {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Search Box */
+.searchbox {
+  margin-bottom: 30px;
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.searchbox form {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.searchbox input[type="search"] {
+  width: 80%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+
+.searchbox button {
+  padding: 12px 20px;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+/* User Display Area */
+.displayuser {
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.users {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: #fdfdfd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s ease;
+}
+
+.users:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.users img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-right: 20px;
+  border: 2px solid #007bff;
+}
+
+.users h4 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.users p {
+  margin: 5px 0 0;
+  font-size: 14px;
+  color: #777;
+}
+
+/* No friends found message */
+.no-friends {
+  text-align: center;
+  color: #888;
+  font-size: 16px;
+  padding: 20px;
+}

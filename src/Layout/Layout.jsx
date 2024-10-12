@@ -22,6 +22,7 @@ import RightBar from "../Components/RightBar/RightBar";
 import { auth } from "../firebaseConfig/Firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import EditProfile from "../Components/EditProfile/EditProfile";
+import SearchUser from "../Components/SearchUser/SearchUser";
 
 const Layout = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -75,7 +76,7 @@ const Layout = () => {
     },
     {
       path: "/editprofile",
-      element: isAuthenticated ? <EditProfile /> : <Navigate to="/signup"/>,
+      element: isAuthenticated ? <EditProfile /> : <Navigate to="/signup" />,
     },
     {
       path: "/",
@@ -86,12 +87,16 @@ const Layout = () => {
           element: <HomePage />,
         },
         {
-          path: "/chatbox/:id",
+          path: `/chatbox/:id`,
           element: <ChatBox />,
         },
         {
-          path: "/profile/:id",
+          path: `/profile/:id`,
           element: <Profile />,
+        },
+        {
+          path: `/searchuser`,
+          element: <SearchUser />,
         },
       ],
     },

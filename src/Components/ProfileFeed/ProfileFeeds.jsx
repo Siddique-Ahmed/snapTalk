@@ -21,10 +21,10 @@ const ProfileFeeds = () => {
         const posts = []; // Array banaya store karne ke liye
 
         querySnapshot.forEach((doc) => {
-          posts.push(doc.data()); // Array mein data push kiya
+          posts.push(doc.data()); 
         });
 
-        setPostData(posts); // Array ko state mein set kiya
+        setPostData(posts);
       } catch (error) {
         toast.error(error.message);
         console.log(error.message);

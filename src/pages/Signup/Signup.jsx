@@ -61,45 +61,6 @@ const Signup = () => {
       });
   };
 
-  // create user with Google //
-  const createUserAccountWithGoogle = () => {
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        const user = result.user;
-        const googleRef = doc(db, "users", user.uid);
-        console.log(user);
-        const userObj = {
-          fullName: user.displayName,
-          userEmail: user.email,
-          isActive: true,
-          provider: "google",
-          userId: user.uid,
-          createdAt: serverTimestamp(),
-          lasSeen: serverTimestamp(),
-          userProfile: "",
-          userBackgroundImg: "",
-          username: "",
-          bio: "",
-          isFollow: false,
-        };
-        try {
-          toast.success("account created successfully!");
-          navigate("/editprofile");
-          setDoc(googleRef, userObj);
-        } catch (error) {
-          toast.error(error.message);
-        }
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        const email = error.customData.email;
-        const credential = GoogleAuthProvider.credentialFromError(error);
-      });
-  };
-
   return (
     <div className={`signup ${changeMood === "dark" ? "darkmood" : ""}`}>
       <form
@@ -116,9 +77,6 @@ const Signup = () => {
         <button type="submit" className="btn btn-primary">
           Signup
         </button>
-        <div onClick={createUserAccountWithGoogle} className="google">
-          <img src={google} alt="" /> Continue with Google
-        </div>
       </form>
     </div>
   );
