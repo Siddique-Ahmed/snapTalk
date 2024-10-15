@@ -5,6 +5,7 @@ import UserProfile from "../../Components/userProfile/UserProfile";
 import ProfileFeeds from "../../Components/ProfileFeed/ProfileFeeds";
 
 const Profile = () => {
+  
   return (
     <>
       <UserProfile />

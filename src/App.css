@@ -37,10 +37,10 @@ form.card.darkmood {
 form.card.darkmood span {
   color: white;
 }
-.darkmood input {
+/* .darkmood input {
   background-color: #444;
   color: white;
-}
+} */
 
 .container {
   max-width: 991px;

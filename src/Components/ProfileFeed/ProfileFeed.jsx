@@ -8,41 +8,29 @@ import {
   faListDots,
   faShare,
 } from "@fortawesome/free-solid-svg-icons";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
 import { useState } from "react";
-import { auth } from "../../firebaseConfig/Firebase";
 import usericon from "../../../public/img/user-dp.jpeg";
 
-dayjs.extend(relativeTime);
-
-const ProfileFeed = ({ postData }) => {
+const ProfileFeed = () => {
   const [openComment, setOpenComment] = useState(false);
 
   const commentHandler = () => {
     setOpenComment(!openComment);
   };
 
-  const postTime = postData.postTime
-    ? dayjs(postData.postTime.toDate()).fromNow()
-    : "Unknown time";
-
   return (
     <>
-      {postData ? (
         <div className="feed">
           <div className="top-content">
-            <Link to={`profile/${postData.userId}`}>
+            <Link to={`profile/id`}>
               <div className="user">
                 <img
-                  src={postData.userProfile ? postData.userProfile : usericon}
+                  src={usericon}
                   alt=""
                 />
                 <div>
-                  <h5>
-                    {postData.fullName ? postData.fullName : "Unknown User"}
-                  </h5>
-                  <small>{postTime}</small>
+                  <h5>Siddique Ahmed</h5>
+                  <small>12 mint ago</small>
                 </div>
               </div>
             </Link>
@@ -51,20 +39,8 @@ const ProfileFeed = ({ postData }) => {
             </span>
           </div>
           <div className="mid-content">
-            <p>{postData.title ? postData.title : null}</p>
-            {postData.img && (
-              <img src={postData.img ? postData.img : null} alt="post image" />
-            )}
-
-            {postData.video && (
-              <video
-                src={postData.video ? postData.video : null}
-                alt="post video"
-                autoPlay
-                controls
-                playsInline
-              />
-            )}
+            <p>gulabo</p>
+              <img src={usericon} alt="post image" />
           </div>
           <div className="bottom-content">
             <div className="action-item">
@@ -72,7 +48,7 @@ const ProfileFeed = ({ postData }) => {
                 <FontAwesomeIcon icon={faHeart} /> 14 Like
               </span>
             </div>
-            <div className="action-item" onClick={commentHandler}>
+            <div className="action-item">
               <span>
                 <FontAwesomeIcon icon={faComment} /> 23 Comment
               </span>
@@ -85,9 +61,6 @@ const ProfileFeed = ({ postData }) => {
           </div>
           {openComment && <Comments />}
         </div>
-      ) : (
-        <p>Post not available</p>
-      )}
     </>
   );
 };

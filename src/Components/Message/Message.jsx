@@ -1,8 +1,6 @@
 import "./message.css";
 import { Link } from "react-router-dom";
-
-// fakeApis...............
-import Messages from "../../FackApis/MessageData";
+import userIcon from "../../../public/img/user-dp.jpeg"
 
 // FontAwesome Icons................
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -21,23 +19,21 @@ const Message = () => {
       </div>
       <div className="border-div"></div>
 
-      {Messages.map((mess ,ind) => (
         <Link to={"/chatbox/id"}>
           <div className="message">
-            <div key={ind} className="user">
+            <div className="user">
               <img
-                src="https://plus.unsplash.com/premium_photo-1689977968861-9c91dbb16049?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjF8fHByb2ZpbGV8ZW58MHx8MHx8fDA%3D"
+                src={userIcon}
                 alt=""
               />
               <div className="green-active"></div>
             </div>
             <div className="message-body">
-              <h5>{mess.name}</h5>
-              <p>{mess.mText}</p>
+              <h5>Siddique</h5>
+              <p>Kal Aana he</p>
             </div>
           </div>
         </Link>
-      ))}
     </div>
   );
 };

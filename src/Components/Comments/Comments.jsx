@@ -1,8 +1,4 @@
 import "./comments.css";
-
-// Fake Apes.....................
-import CommentData from "../../FackApis/CommentData";
-import CurrentUser from "../../FackApis/CurrentUserData";
 import { Link } from "react-router-dom";
 
 const Comments = () => {

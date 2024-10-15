@@ -4,6 +4,7 @@ import {
   Navigate,
   Outlet,
   RouterProvider,
+  useParams,
 } from "react-router-dom";
 
 //Pages............
@@ -19,35 +20,11 @@ import LeftBar from "../Components/LeftBar/LeftBar";
 import RightBar from "../Components/RightBar/RightBar";
 
 // Firebase...................
-import { auth } from "../firebaseConfig/Firebase";
-import { onAuthStateChanged } from "firebase/auth";
 import EditProfile from "../Components/EditProfile/EditProfile";
 import SearchUser from "../Components/SearchUser/SearchUser";
 
 const Layout = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setIsAuthenticated(true);
-      } else {
-        setIsAuthenticated(false);
-      }
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
-  }, []);
-
-  if (loading) {
-    return (
-      <div style={{ textAlign: "center", margin: "45vh 0", fontSize: "35px" }}>
-        Loading...
-      </div>
-    );
-  }
 
   const Feed = () => {
     return (
@@ -76,11 +53,11 @@ const Layout = () => {
     },
     {
       path: "/editprofile",
-      element: isAuthenticated ? <EditProfile /> : <Navigate to="/signup" />,
+      element:<EditProfile />,
     },
     {
       path: "/",
-      element: isAuthenticated ? <Feed /> : <Navigate to="/signup" />,
+      element: <Feed />,
       children: [
         {
           path: "/",
