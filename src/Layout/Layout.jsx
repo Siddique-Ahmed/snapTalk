@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   createBrowserRouter,
   Navigate,
   Outlet,
   RouterProvider,
-  useParams,
 } from "react-router-dom";
 
 //Pages............
@@ -22,9 +21,19 @@ import RightBar from "../Components/RightBar/RightBar";
 // Firebase...................
 import EditProfile from "../Components/EditProfile/EditProfile";
 import SearchUser from "../Components/SearchUser/SearchUser";
+import { auth } from "../firebaseConfig/Firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import { toast } from "react-toastify";
 
 const Layout = () => {
-
+  const [authorizedUser, setAuthorizedUser] = useState("");
+  try {
+    onAuthStateChanged(auth, (user) => {
+      setAuthorizedUser(user.uid);
+    });
+  } catch (error) {
+    toast.error(error.message);
+  }
 
   const Feed = () => {
     return (
@@ -53,7 +62,7 @@ const Layout = () => {
     },
     {
       path: "/editprofile",
-      element:<EditProfile />,
+      element: <EditProfile />,
     },
     {
       path: "/",
@@ -61,7 +70,7 @@ const Layout = () => {
       children: [
         {
           path: "/",
-          element: <HomePage />,
+          element: authorizedUser ? <HomePage /> : <Navigate to={"/signup"} />,
         },
         {
           path: `/chatbox/:id`,

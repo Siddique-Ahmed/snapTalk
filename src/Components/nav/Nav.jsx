@@ -5,6 +5,10 @@ import { Link, useNavigate } from "react-router-dom";
 import DarkMood from "../DarkMood/DarkMood";
 import userLogo from "../../../public/img/user-dp.jpeg";
 
+// Firebase................
+import { auth, db } from "../../firebaseConfig/Firebase";
+import { signOut } from "firebase/auth";
+
 // FontAwesome Icons..............
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -15,9 +19,28 @@ import {
   faSearch,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { doc, updateDoc } from "firebase/firestore";
 
 const Nav = () => {
+  const navigate = useNavigate();
+
+  // logout user //
+  const logoutUser = () => {
+    //get data from Firebase //
+    try {
+      const userRef = doc(db, "users", auth.currentUser.uid);
+      updateDoc(userRef, {
+        isActive: false,
+      });
+      signOut(auth).then(() => {
+        toast.success("logout Successfully");
+        navigate("/login");
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   return (
     <nav>
@@ -50,18 +73,16 @@ const Nav = () => {
           </Link>
           <DarkMood />
           <FontAwesomeIcon
+            onClick={logoutUser}
             icon={faRightToBracket}
             style={{ cursor: "pointer" }}
           />
-            <Link to={`/profile/id`}>
-              <div className="user">
-                <img
-                  src={userLogo}
-                  alt=""
-                />
-                <h4>Siddique</h4>
-              </div>
-            </Link>
+          <Link to={`/profile/id`}>
+            <div className="user">
+              <img src={userLogo} alt="" />
+              <h4>Siddique</h4>
+            </div>
+          </Link>
         </div>
       </div>
     </nav>
