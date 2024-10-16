@@ -1,9 +1,27 @@
 import "./EditProfile.css";
 
 const EditProfile = () => {
+  const editUserProfile = (e) => {
+    e.preventDefault();
+    console.log(e);
+
+    const editProfile = {
+      fullName: e.target[0].value,
+      username: e.target[1].value,
+      bio: e.target[2].value,
+      profileImg: e.target[3].files[0],
+      bgImg: e.target[4].files[0],
+    };
+  };
+
   return (
     <div className="edit-profile-container">
-      <form className="edit-form">
+      <form
+        onSubmit={(e) => {
+          editUserProfile(e);
+        }}
+        className="edit-form"
+      >
         <h1>Edit Profile</h1>
         <div className="input-box">
           <label htmlFor="name">Full Name</label>
@@ -19,11 +37,11 @@ const EditProfile = () => {
         </div>
         <div className="input-box">
           <label htmlFor="profile">Profile Image</label>
-          <input type="file" id="profile" required />
+          <input type="file" id="profile" required accept="image/*" />
         </div>
         <div className="input-box">
           <label htmlFor="background">Background Image</label>
-          <input type="file" id="background" required />
+          <input type="file" id="background" required accept="video/*" />
         </div>
         <div className="button-box">
           <div

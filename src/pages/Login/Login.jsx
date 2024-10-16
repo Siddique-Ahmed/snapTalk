@@ -25,8 +25,8 @@ const Login = () => {
       });
       signinButton.innerHTML = "Login";
       signinButton.disabled = false;
-      toast.success("login successfully!");
       navigate("/");
+      toast.success("login successfully!");
     } catch (error) {
       toast.error(error.message);
       signinButton.innerHTML = "Login";
