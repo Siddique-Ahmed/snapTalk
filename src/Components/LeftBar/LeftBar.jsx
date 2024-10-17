@@ -10,18 +10,45 @@ import Watch from "../../assets/icons/4.png";
 import Gallery from "../../assets/icons/5.png";
 import Videos from "../../assets/icons/6.png";
 import Message from "../../assets/icons/7.png";
+import { useEffect, useState } from "react";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "../../firebaseConfig/Firebase";
 
 const LeftBar = () => {
+  const [data, setData] = useState();
+  const userID = auth.currentUser.uid;
+
+  useEffect(() => {
+    //Get USer Data From Firebase //
+    const getUserDataFromFirebase = async () => {
+      const docRef = doc(db, "users", userID);
+      const dataArr = [];
+      await getDoc(docRef).then((data) => {
+        dataArr.push(data.data());
+        setData(dataArr);
+      });
+    };
+
+    getUserDataFromFirebase();
+  }, []);
+
   return (
     <div className="leftBar">
       <div className="left-container">
         <div className="menu">
-          <Link to={"/profile/id"}>
-            <div className="user">
-              <img src={userLogo} alt="" />
-              <h4>Siddique</h4>
-            </div>
-          </Link>
+          {data?.map((user, ind) => {
+            return (
+              <Link key={ind} to={`/profile/${user.uid}`}>
+                <div className="user">
+                  <img
+                    src={user.profileImg ? user.profileImg : userLogo}
+                    alt=""
+                  />
+                  <h4>{user.fullName ? user.fullName : user.username}</h4>
+                </div>
+              </Link>
+            );
+          })}
           <Link to="/">
             <div className="item">
               <img src={Friend} alt="" />

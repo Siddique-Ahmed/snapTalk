@@ -20,16 +20,19 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { useEffect, useState } from "react";
 
 const Nav = () => {
   const navigate = useNavigate();
+  const [data, setData] = useState([]);
+  const userID = auth.currentUser.uid;
 
   // logout user //
   const logoutUser = () => {
     //get data from Firebase //
     try {
-      const userRef = doc(db, "users", auth.currentUser.uid);
+      const userRef = doc(db, "users", userID);
       updateDoc(userRef, {
         isActive: false,
       });
@@ -41,6 +44,20 @@ const Nav = () => {
       console.log(error.message);
     }
   };
+
+  useEffect(() => {
+    //Get USer Data From Firebase //
+    const getUserDataFromFirebase = async () => {
+      const docRef = doc(db, "users", userID);
+      const dataArr = [];
+      await getDoc(docRef).then((data) => {
+        dataArr.push(data.data());
+        setData(dataArr);
+      });
+    };
+
+    getUserDataFromFirebase();
+  }, []);
 
   return (
     <nav>
@@ -54,9 +71,13 @@ const Nav = () => {
           <Link to={"/"}>
             <FontAwesomeIcon icon={faHome} />
           </Link>
-          <Link to={"/profile/id"}>
-            <FontAwesomeIcon icon={faUser} />
-          </Link>
+          {data.map((user, ind) => {
+            return (
+              <Link key={ind} to={`/profile/${user.uid}`}>
+                <FontAwesomeIcon icon={faUser} />
+              </Link>
+            );
+          })}
           <Link to={"/searchuser"}>
             <FontAwesomeIcon icon={faSearch} />
           </Link>
@@ -77,12 +98,19 @@ const Nav = () => {
             icon={faRightToBracket}
             style={{ cursor: "pointer" }}
           />
-          <Link to={`/profile/id`}>
-            <div className="user">
-              <img src={userLogo} alt="" />
-              <h4>Siddique</h4>
-            </div>
-          </Link>
+          {data.map((user, ind) => {
+            return (
+              <Link key={ind} to={`/profile/${user.uid}`}>
+                <div className="user">
+                  <img
+                    src={user.profileImg ? user.profileImg : userLogo}
+                    alt=""
+                  />
+                  <h4>{user.fullName ? user.fullName : user.username}</h4>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </div>
     </nav>

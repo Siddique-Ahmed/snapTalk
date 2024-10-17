@@ -3,8 +3,10 @@ import { auth, db, storageDB } from "../../firebaseConfig/Firebase";
 import "./EditProfile.css";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { doc, updateDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 const EditProfile = () => {
+  const navigate = useNavigate();
   const editUserProfile = async (e) => {
     e.preventDefault();
 
@@ -13,6 +15,7 @@ const EditProfile = () => {
     const bio = e.target[2].value;
     const profileImg = e.target[3].files[0];
     const bgImg = e.target[4].files[0];
+    const button = e.target[5];
     const userID = auth.currentUser.uid;
 
     const editProfileObj = {
@@ -23,6 +26,8 @@ const EditProfile = () => {
       bgImg: null,
     };
 
+    button.innerHTML = "Uploading...";
+    button.disabled = true;
     try {
       if (profileImg) {
         // Upload profile image
@@ -43,8 +48,13 @@ const EditProfile = () => {
       // Now update the document with both image URLs
       const userRef = doc(db, "users", userID);
       await updateDoc(userRef, editProfileObj);
-
+      e.target[0].value = "";
+      e.target[1].value = "";
+      e.target[2].value = "";
+      button.innerHTML = "Upload Profile";
+      button.disabled = false;
       toast.success("Profile updated successfully!");
+      navigate("/profile/id")
     } catch (error) {
       toast.error(error.message);
     }

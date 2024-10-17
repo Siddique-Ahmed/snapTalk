@@ -38,7 +38,7 @@ const Signup = () => {
         signupButton.innerText = "Signup";
         signupButton.disabled = false;
         toast.success("account created successfully");
-        navigate("/");
+        navigate("/editprofile");
       });
     } catch (error) {
       toast.error(error.message);

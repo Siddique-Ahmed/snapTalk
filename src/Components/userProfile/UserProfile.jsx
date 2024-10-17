@@ -9,39 +9,80 @@ import { faFeed, faLink, faMessage } from "@fortawesome/free-solid-svg-icons";
 import { doc, getDoc } from "firebase/firestore";
 
 const UserProfile = () => {
-  
+  const [data, setData] = useState([]);
+
+  // current user profile //
+  useEffect(() => {
+    const fetchingData = async () => {
+      const docRef = doc(db, "users", auth.currentUser.uid);
+      const dataArr = [];
+      await getDoc(docRef).then((data) => {
+        dataArr.push(data.data());
+        setData(dataArr);
+      });
+    };
+    fetchingData();
+  }, []);
+
   return (
-    <div className="userProfile">
-        <>
-          <div className="cover-photos">
-            <img src={bgCover} alt="Background" />
+    <>
+      {data.map((user, ind) => {
+        return (
+          <div key={ind} className="userProfile">
+            <>
+              <div className="cover-photos">
+                <img src={user.bgImg ? user.bgImg : bgCover} alt="Background" />
+              </div>
+              <div className="profile-info">
+                <img
+                  src={user.profileImg ? user.profileImg : userLogo}
+                  alt="Profile"
+                />
+                <div className="user-name">
+                  <h3>{user.fullName}</h3>
+                  <h5>{user.username}</h5>
+                </div>
+                <div className="profile-button">
+                  {auth.currentUser.uid ? (
+                    <>
+                      <Link to={"/editProfile"}>
+                        <button className="btn btn-primary">
+                          Edit Profile
+                        </button>
+                      </Link>
+                      <Link>
+                        <button className="btn">
+                          Followers {" "}
+                          <span>333</span>
+                        </button>
+                      </Link>
+                      <Link>
+                        <button className="btn btn-primary">
+                          Following {" "}
+                          <span>33</span>
+                        </button>
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      <Link to={`/chatbox/id`}>
+                        <button className="btn btn-primary">
+                          <FontAwesomeIcon icon={faMessage} /> Message
+                        </button>
+                      </Link>
+                      <button className="btn btn-primary">
+                        <FontAwesomeIcon icon={faFeed} /> Follow Me
+                      </button>
+                    </>
+                  )}
+                </div>
+                <p className="bio">{user.bio}</p>
+              </div>
+            </>
           </div>
-          <div className="profile-info">
-            <img src={userLogo} alt="Profile" />
-            <div className="user-name">
-              <h3>Siddique</h3>
-              <h5>sidique12</h5>
-            </div>
-            <div className="profile-button">
-                <Link to={"/chatbox/id"}>
-                  <button className="btn btn-primary">
-                    <FontAwesomeIcon icon={faMessage} /> Message
-                  </button>
-                </Link>
-                <Link to={"/editProfile"}>
-                  <button className="btn">Edit Profile</button>
-                </Link>
-                {/* <button className="btn btn-primary">
-                  <FontAwesomeIcon icon={faFeed} /> Follow Me
-                </button> */}
-              <button className="btn btn-primary">
-                <FontAwesomeIcon icon={faLink} />
-              </button>
-            </div>
-            <p className="bio">helllo everyone</p>
-          </div>
-        </>
-    </div>
+        );
+      })}
+    </>
   );
 };
 

@@ -42,7 +42,7 @@ const Layout = () => {
   }, []);
 
   if (loading) {
-    return <div className="text-4xl">Loading...</div>;
+    return <div className="loading">Loading...</div>;
   }
 
   const Feed = () => {
@@ -71,6 +71,10 @@ const Layout = () => {
       element: <Signup />,
     },
     {
+      path: "/editprofile",
+      element: authorizedUser ? <EditProfile /> : <Navigate to={"/signup"} />,
+    },
+    {
       path: "/",
       element: authorizedUser ? <Feed /> : <Navigate to={"/signup"} />,
       children: [
@@ -83,16 +87,12 @@ const Layout = () => {
           element: <ChatBox />,
         },
         {
-          path: `/profile/:id`,
+          path: `/profile/:uid`,
           element: <Profile />,
         },
         {
           path: `/searchuser`,
           element: <SearchUser />,
-        },
-        {
-          path: "/editprofile",
-          element: <EditProfile />,
         },
       ],
     },

@@ -82,7 +82,7 @@ p {
   color: var(--color-soft);
 }
 .btn {
-  padding: 0.6rem 1.6rem;
+  padding: 0.6rem 1rem;
   display: inline-block;
   width: fit-content;
   cursor: pointer;
@@ -110,6 +110,14 @@ main {
   grid-template-columns: 20% 51% 23%;
   gap: 3%;
   width: 100%;
+}
+.loading{
+  font-size: 45px;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 @media (max-width: 1024px) {
   main {
