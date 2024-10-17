@@ -1,7 +1,9 @@
 import "./feeds.css";
 import Feed from "./Feed";
+import { useEffect } from "react";
 
 const Feeds = () => {
+
 
   return (
     <div className="feeds">

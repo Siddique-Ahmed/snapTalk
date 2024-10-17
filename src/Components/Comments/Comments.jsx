@@ -1,5 +1,6 @@
 import "./comments.css";
 import { Link } from "react-router-dom";
+import userLogo from "../../../public/img/user-dp.jpeg"
 
 const Comments = () => {
   return (
@@ -8,7 +9,7 @@ const Comments = () => {
         <form action="#">
           <div className="user">
             <img
-              src="https://images.unsplash.com/photo-1517630800677-932d836ab680?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHByb2ZpbGV8ZW58MHx8MHx8fDA%3D"
+              src={userLogo}
               alt=""
             />
             <input type="text" placeholder="Write a comment..." />
@@ -18,21 +19,19 @@ const Comments = () => {
           </div>
         </form>
       </div>
-      {CommentData.map((comment) => (
         <Link to={"/profile/id"}>
-          <div className="user" key={comment.id}>
+          <div className="user" >
             <img
-              src="https://images.unsplash.com/photo-1517630800677-932d836ab680?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHByb2ZpbGV8ZW58MHx8MHx8fDA%3D"
+              src={userLogo}
               alt=""
             />
             <div>
-            <h5>{comment.name}</h5>
-            <p>{comment.CommeText}</p>
+            <h5>Siddique</h5>
+            <p>nice pic</p>
             </div>
           <small>1h</small>
           </div>
         </Link>
-      ))}
     </div>
   );
 };

@@ -11,8 +11,9 @@ import {
 import { useState } from "react";
 import usericon from "../../../public/img/user-dp.jpeg";
 
-const ProfileFeed = () => {
+const ProfileFeed = ({user}) => {
   const [openComment, setOpenComment] = useState(false);
+  
 
   const commentHandler = () => {
     setOpenComment(!openComment);
@@ -48,7 +49,7 @@ const ProfileFeed = () => {
                 <FontAwesomeIcon icon={faHeart} /> 14 Like
               </span>
             </div>
-            <div className="action-item">
+            <div onClick={commentHandler} className="action-item">
               <span>
                 <FontAwesomeIcon icon={faComment} /> 23 Comment
               </span>
