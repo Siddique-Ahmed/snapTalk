@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   createBrowserRouter,
   Navigate,
@@ -6,14 +6,14 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
-//Pages............
+// Pages............
 import Login from "../pages/Login/Login";
 import Signup from "../pages/Signup/Signup";
 import ChatBox from "../pages/ChatBox/ChatBox";
 import HomePage from "../pages/HomePage/HomePage";
 import Profile from "../pages/Profile/Profile";
 
-//Components.........
+// Components.........
 import Nav from "../Components/nav/Nav";
 import LeftBar from "../Components/LeftBar/LeftBar";
 import RightBar from "../Components/RightBar/RightBar";
@@ -23,16 +23,26 @@ import EditProfile from "../Components/EditProfile/EditProfile";
 import SearchUser from "../Components/SearchUser/SearchUser";
 import { auth } from "../firebaseConfig/Firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import { toast } from "react-toastify";
 
 const Layout = () => {
-  const [authorizedUser, setAuthorizedUser] = useState("");
-  try {
-    onAuthStateChanged(auth, (user) => {
-      setAuthorizedUser(user.uid);
+  const [authorizedUser, setAuthorizedUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setAuthorizedUser(user.uid);
+      } else {
+        setAuthorizedUser(null);
+      }
+      setLoading(false);
     });
-  } catch (error) {
-    toast.error(error.message);
+
+    return () => unsubscribe();
+  }, []);
+
+  if (loading) {
+    return <div className="text">Loading...</div>;
   }
 
   const Feed = () => {
@@ -50,7 +60,7 @@ const Layout = () => {
     );
   };
 
-  //Router...........
+  // Router...........
   const router = createBrowserRouter([
     {
       path: "/login",
