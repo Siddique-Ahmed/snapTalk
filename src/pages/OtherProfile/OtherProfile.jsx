@@ -8,7 +8,7 @@ const Profile = () => {
   return (
     <>
       <UserProfile />
-      <AddPost /> 
+      <AddPost />
       <ProfileFeeds />
     </>
   );

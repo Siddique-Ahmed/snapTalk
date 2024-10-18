@@ -12,6 +12,7 @@ import Signup from "../pages/Signup/Signup";
 import ChatBox from "../pages/ChatBox/ChatBox";
 import HomePage from "../pages/HomePage/HomePage";
 import Profile from "../pages/Profile/Profile";
+import OtherProfile from "../pages/OtherProfile/OtherProfile";
 
 // Components.........
 import Nav from "../Components/nav/Nav";
@@ -91,6 +92,10 @@ const Layout = () => {
         {
           path: `/profile/:uid`,
           element: <Profile />,
+        },
+        {
+          path: `/otherprofile/:uid`,
+          element: <OtherProfile />,
         },
         {
           path: `/searchuser`,
