@@ -46,6 +46,7 @@ const AddPost = () => {
 
   const AddPostDataInFirebaseDB = async (e) => {
     e.preventDefault();
+
     const postTitle = e.target[0].value;
     const postBtn = e.target[1];
     const postImg = e.target[2].files[0];
@@ -65,6 +66,8 @@ const AddPost = () => {
       uid: userID,
       likes: [],
       likesCount: 0,
+      userImg: data[0].profileImg,
+      username: data[0].fullName,
     };
 
     try {
@@ -81,7 +84,6 @@ const AddPost = () => {
         resetButton(postBtn);
         return;
       }
-
       // Upload video if present
       if (postVideo) {
         const postVideoRef = ref(storageDB, `postVideo/${postVideo.name}`);
@@ -89,7 +91,6 @@ const AddPost = () => {
         const postVideoUrl = await getDownloadURL(videoSnapshot.ref);
         postObj.postVideo = postVideoUrl;
       }
-
       // Upload image if present
       if (postImg) {
         const postImgRef = ref(storageDB, `postImg/${postImg.name}`);
@@ -97,17 +98,24 @@ const AddPost = () => {
         const postImgUrl = await getDownloadURL(imgSnapshot.ref);
         postObj.postImg = postImgUrl;
       }
-
       // Add post data in Firestore
       await addDoc(collection(db, "posts"), postObj);
       toast.success("Post created successfully!");
+      // Reset the form after successful post
+      resetForm(e);
     } catch (error) {
       toast.error("Error posting: " + error.message);
     } finally {
       resetButton(postBtn);
-      e.target[0].value = "";
     }
   };
+  // Reset form inputs including file inputs
+  const resetForm = (e) => {
+    e.target[0].value = "";
+    e.target[2].value = "";
+    e.target[3].value = "";
+  };
+
   const resetButton = (btn) => {
     btn.innerHTML = "Post";
     btn.disabled = false;

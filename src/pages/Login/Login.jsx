@@ -4,10 +4,12 @@ import { toast } from "react-toastify";
 import { doc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../../firebaseConfig/Firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { useEffect } from "react";
 
 const Login = () => {
   const navigate = useNavigate();
-  // signin user //
+
+  // Signin user
   const signinUser = async (e) => {
     e.preventDefault();
     const email = e.target[0].value;
@@ -16,7 +18,7 @@ const Login = () => {
 
     signinButton.innerHTML = "Loading....";
     signinButton.disabled = true;
-    // Signin the user
+
     try {
       await signInWithEmailAndPassword(auth, email, password);
       const userRef = doc(db, "users", auth.currentUser.uid);
@@ -25,14 +27,27 @@ const Login = () => {
       });
       signinButton.innerHTML = "Login";
       signinButton.disabled = false;
-      navigate("/");
-      toast.success("login successfully!");
+      toast.success("Login successfully!");
+      
+      setTimeout(() => {
+        navigate("/");
+      }, 100);
     } catch (error) {
       toast.error(error.message);
       signinButton.innerHTML = "Login";
       signinButton.disabled = false;
     }
   };
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        navigate("/");
+      }
+    });
+
+    return () => unsubscribe();
+  }, [navigate]);
 
   return (
     <div className={`login`}>

@@ -31,8 +31,10 @@ const Layout = () => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
+
         setAuthorizedUser(user.uid);
       } else {
+
         setAuthorizedUser(null);
       }
       setLoading(false);
@@ -76,7 +78,7 @@ const Layout = () => {
     },
     {
       path: "/",
-      element: authorizedUser ? <Feed /> : <Navigate to={"/signup"} />,
+      element: authorizedUser ? <Feed /> : <Navigate to={"/login"} />,
       children: [
         {
           path: "/",
