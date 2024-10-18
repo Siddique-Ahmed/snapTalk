@@ -5,24 +5,22 @@ import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebaseConfig/Firebase";
 
 const Feeds = () => {
-  const [postData, setPostData] = useState([]);
+  const [postsData, setPostsData] = useState([]);
 
   useEffect(() => {
-    const docRef = collection(db, "posts");
-
-    const unsubscribe = onSnapshot(docRef, (querySnapshot) => {
-      const dataArr = [];
-      querySnapshot.forEach((doc) => {
-        dataArr.push({ id: doc.id, ...doc.data() }); 
-      });
-      setPostData(dataArr);
+    const unsubscribePosts = onSnapshot(collection(db, "posts"), (snapshot) => {
+      const dataArr = snapshot.docs.map((doc) => doc.data());
+      setPostsData(dataArr);
     });
-    return () => unsubscribe();
+
+    return () => {
+      unsubscribePosts();
+    };
   }, []);
 
   return (
     <div className="feeds">
-      <Feed postData={postData} />
+      <Feed postData={postsData} />
     </div>
   );
 };

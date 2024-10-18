@@ -2,7 +2,7 @@ import { toast } from "react-toastify";
 import { auth, db, storageDB } from "../../firebaseConfig/Firebase";
 import "./EditProfile.css";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { doc, updateDoc } from "firebase/firestore";
+import { collection, doc, getDocs, query, updateDoc, where, writeBatch } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 
 const EditProfile = () => {
@@ -35,6 +35,23 @@ const EditProfile = () => {
         const profileSnapshot = await uploadBytes(profileImgRef, profileImg);
         const profileImgUrl = await getDownloadURL(profileSnapshot.ref);
         editProfileObj.profileImg = profileImgUrl;
+        // Update user profile in all posts
+        const postQuery = query(
+          collection(db, "posts"),
+          where("uid", "==", userID)
+        );
+        const querySnapshot = await getDocs(postQuery);
+        const batch = writeBatch(db);
+
+        querySnapshot.forEach((doc) => {
+          const postRef = doc.ref;
+          batch.update(postRef, {
+            userImg: profileImgUrl,
+            username: fullName,
+          });
+        });
+
+        await batch.commit();
       }
 
       if (bgImg) {
@@ -54,9 +71,11 @@ const EditProfile = () => {
       button.innerHTML = "Upload Profile";
       button.disabled = false;
       toast.success("Profile updated successfully!");
-      navigate("/profile/id")
+      navigate("/profile/id");
     } catch (error) {
       toast.error(error.message);
+      button.innerHTML = "Upload Profile";
+      button.disabled = false;
     }
   };
 

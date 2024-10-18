@@ -13,8 +13,7 @@ import { useEffect, useState } from "react";
 import {
   addDoc,
   collection,
-  doc,
-  getDoc,
+  onSnapshot,
   serverTimestamp,
 } from "firebase/firestore";
 import { auth, db, storageDB } from "../../firebaseConfig/Firebase";
@@ -27,21 +26,14 @@ const AddPost = () => {
 
   // Get User Data from Firebase
   useEffect(() => {
-    const getUserDataFromFirebase = async () => {
-      try {
-        const docRef = doc(db, "users", userID);
-        const userDoc = await getDoc(docRef);
-        if (userDoc.exists()) {
-          setData([userDoc.data()]);
-        } else {
-          toast.error("User data not found");
-        }
-      } catch (error) {
-        toast.error("Error fetching user data");
+    const unsubscribe = onSnapshot(collection(db, "users"), (snapshot) => {
+      const userData = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+      const currentUser = userData.find(user => user.id === userID);
+      if (currentUser) {
+        setData([currentUser]);
       }
-    };
-
-    getUserDataFromFirebase();
+    });
+    return () => unsubscribe();
   }, [userID]);
 
   const AddPostDataInFirebaseDB = async (e) => {
@@ -66,8 +58,8 @@ const AddPost = () => {
       uid: userID,
       likes: [],
       likesCount: 0,
-      userImg: data[0].profileImg,
-      username: data[0].fullName,
+      userImg: data[0]?.profileImg,
+      username: data[0]?.fullName,
     };
 
     try {
