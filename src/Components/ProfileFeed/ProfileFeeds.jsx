@@ -2,30 +2,30 @@ import "./profileFeed.css";
 import ProfileFeed from "./ProfileFeed";
 import { useEffect, useState } from "react";
 import { auth, db } from "../../firebaseConfig/Firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
 const ProfileFeeds = () => {
   const [data, setData] = useState();
   const userID = auth.currentUser.uid;
 
   useEffect(() => {
-    //Get USer Data From Firebase //
+    //Get posts Data From Firebase //
     const getUserDataFromFirebase = async () => {
-      const docRef = doc(db, "users", userID);
+      const docRef = collection(db, "posts");
+      const q = query(docRef,where("uid" , "==", userID));
       const dataArr = [];
-      await getDoc(docRef).then((data) => {
+      const querySnapshot = await getDocs(q)
+      querySnapshot.forEach((data)=>{
         dataArr.push(data.data());
-        setData(dataArr);
-      });
+      })
+      setData(dataArr)
     };
-
     getUserDataFromFirebase();
   }, []);
 
-
   return (
     <div className="feeds">
-      <ProfileFeed user={data} />
+      <ProfileFeed postData={data}/>
     </div>
   );
 };
