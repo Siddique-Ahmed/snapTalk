@@ -26,6 +26,9 @@
   margin-top: 0.5rem;
   border: 3px solid var(--color-primary);
 }
+.chat-box .user-name h5{
+  text-align: center;
+}
 .chat-box-bottom {
   background: var(--color-bg);
   width: 80%;

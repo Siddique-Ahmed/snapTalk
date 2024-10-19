@@ -2,7 +2,7 @@ import "./otherUserProfile.css";
 import { Link } from "react-router-dom";
 import userLogo from "../../../public/img/user-dp.jpeg";
 import bgCover from "../../../public/img/bg-cover.png";
-import { auth, db } from "../../firebaseConfig/Firebase";
+import { db } from "../../firebaseConfig/Firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFeed, faMessage } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
@@ -47,36 +47,14 @@ const OtherUserProfile = ({ id }) => {
                   <h5>{data.username}</h5>
                 </div>
                 <div className="profile-button">
-                  {!auth.currentUser.uid ? (
-                    <>
-                      <Link to={"/editProfile"}>
-                        <button className="btn btn-primary">
-                          Edit Profile
-                        </button>
-                      </Link>
-                      <Link>
-                        <button className="btn">
-                          Followers <span>333</span>
-                        </button>
-                      </Link>
-                      <Link>
-                        <button className="btn btn-primary">
-                          Following <span>33</span>
-                        </button>
-                      </Link>
-                    </>
-                  ) : (
-                    <>
-                      <Link to={`/chatbox/id`}>
-                        <button className="btn btn-primary">
-                          <FontAwesomeIcon icon={faMessage} /> Message
-                        </button>
-                      </Link>
-                      <button className="btn btn-primary">
-                        <FontAwesomeIcon icon={faFeed} /> Follow Me
-                      </button>
-                    </>
-                  )}
+                  <Link to={`/chatbox/${id}`}>
+                    <button className="btn btn-primary">
+                      <FontAwesomeIcon icon={faMessage} /> Message
+                    </button>
+                  </Link>
+                  <button className="btn btn-primary">
+                    <FontAwesomeIcon icon={faFeed} /> Follow Me
+                  </button>
                 </div>
                 <p className="bio">{data.bio}</p>
               </div>
