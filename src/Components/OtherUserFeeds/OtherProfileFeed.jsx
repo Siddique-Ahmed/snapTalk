@@ -15,7 +15,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 
 dayjs.extend(relativeTime);
 
-const OtherProfileFeed = () => {
+const OtherProfileFeed = ({ otherPost }) => {
   const [openComment, setOpenComment] = useState(false);
 
   const commentHandler = () => {
@@ -24,14 +24,22 @@ const OtherProfileFeed = () => {
 
   return (
     <>
+      {otherPost.map((post, ind) => {
+        let postDate;
+        if (post.createdAt && post.createdAt?.seconds) {
+          postDate = new Date(post.createdAt?.seconds * 1000);
+        } else {
+          postDate = new Date();
+        }
+        return (
           <div className="feed">
             <div className="top-content">
-              <Link to={`profile/id`}>
+              <Link to={`profile/${post.uid}`}>
                 <div className="user">
-                  <img src={userLogo} alt="" />
+                  <img src={post.userImg ? post.userImg : userLogo} alt="" />
                   <div>
-                    <h5>Siddique</h5>
-                    <small>45mint ago</small>{" "}
+                    <h5>{post.username}</h5>
+                    <small>{dayjs().to(postDate)}</small>{" "}
                   </div>
                 </div>
               </Link>
@@ -40,10 +48,21 @@ const OtherProfileFeed = () => {
               </span>
             </div>
             <div className="mid-content">
-              <p>Hello</p>
-               <img src={userLogo} alt="" />
-
-                <video src={userLogo} loop autoPlay />
+              <p>{post.title}</p>
+              {post.postImg ? (
+                <img src={post.postImg ? post.postImg : userLogo} alt="" />
+              ) : (
+                ""
+              )}
+              {post.postVideo ? (
+                <video
+                  src={post.postVideo ? post.postVideo : userLogo}
+                  loop
+                  autoPlay
+                />
+              ) : (
+                ""
+              )}
             </div>
             <div className="bottom-content">
               <div className="action-item">
@@ -64,6 +83,8 @@ const OtherProfileFeed = () => {
             </div>
             {openComment && <Comments />}
           </div>
+        );
+      })}
     </>
   );
 };
