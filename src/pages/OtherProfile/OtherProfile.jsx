@@ -1,15 +1,13 @@
 // Components............
 import AddPost from "../../Components/AddPost/AddPost";
-import UserProfile from "../../Components/userProfile/UserProfile";
-import ProfileFeeds from "../../Components/ProfileFeed/ProfileFeeds";
+import OtherUserProfile from "../../Components/OtherUserProfile/OtherUserProfile";
+import OtherProfileFeeds from "../../Components/OtherUserFeeds/OtherProfileFeeds";
 
 const Profile = () => {
-  
   return (
     <>
-      <UserProfile />
-      <AddPost />
-      <ProfileFeeds />
+      <OtherUserProfile />
+      <OtherProfileFeeds />
     </>
   );
 };

@@ -1,4 +1,4 @@
-import "./feeds.css";
+import "./otherprofilefeed.css";
 import userLogo from "../../../public/img/user-dp.jpeg";
 import { Link } from "react-router-dom";
 import Comments from "../Comments/Comments";
@@ -9,13 +9,13 @@ import {
   faListDots,
   faShare,
 } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 
 dayjs.extend(relativeTime);
 
-const Feed = ({ postData }) => {
+const OtherProfileFeed = () => {
   const [openComment, setOpenComment] = useState(false);
 
   const commentHandler = () => {
@@ -24,23 +24,14 @@ const Feed = ({ postData }) => {
 
   return (
     <>
-      {postData.map((data, ind) => {
-        let postDate;
-        if (data.createdAt && data.createdAt.seconds) {
-          postDate = new Date(data.createdAt.seconds * 1000);
-        } else {
-          postDate = new Date();
-        }
-
-        return (
-          <div key={ind} className="feed">
+          <div className="feed">
             <div className="top-content">
               <Link to={`profile/id`}>
                 <div className="user">
-                  <img src={data.userImg ? data.userImg : userLogo} alt="" />
+                  <img src={userLogo} alt="" />
                   <div>
-                    <h5>{data.username}</h5>
-                    <small>{dayjs().to(postDate)}</small>{" "}
+                    <h5>Siddique</h5>
+                    <small>45mint ago</small>{" "}
                   </div>
                 </div>
               </Link>
@@ -49,13 +40,10 @@ const Feed = ({ postData }) => {
               </span>
             </div>
             <div className="mid-content">
-              <p>{data.title ? data.title : ""}</p>
-              {data.postImg ? <img src={data.postImg} alt="" /> : ""}
-              {data.postVideo ? (
-                <video src={data.postVideo} loop autoPlay />
-              ) : (
-                ""
-              )}
+              <p>Hello</p>
+               <img src={userLogo} alt="" />
+
+                <video src={userLogo} loop autoPlay />
             </div>
             <div className="bottom-content">
               <div className="action-item">
@@ -76,10 +64,8 @@ const Feed = ({ postData }) => {
             </div>
             {openComment && <Comments />}
           </div>
-        );
-      })}
     </>
   );
 };
 
-export default Feed;
+export default OtherProfileFeed;
