@@ -35,7 +35,7 @@ const Feed = ({ postData }) => {
         return (
           <div key={ind} className="feed">
             <div className="top-content">
-              <Link to={`profile/id`}>
+              <Link to={`profile/${data.uid}`}>
                 <div className="user">
                   <img src={data.userImg ? data.userImg : userLogo} alt="" />
                   <div>
