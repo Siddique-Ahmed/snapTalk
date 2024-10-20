@@ -9,7 +9,7 @@ import {
   faListDots,
   faShare,
 } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 
@@ -17,7 +17,7 @@ dayjs.extend(relativeTime);
 
 const Feed = ({ postData }) => {
   const [openComment, setOpenComment] = useState(false);
-
+  
   const commentHandler = () => {
     setOpenComment(!openComment);
   };
@@ -60,7 +60,7 @@ const Feed = ({ postData }) => {
             <div className="bottom-content">
               <div className="action-item">
                 <spanz>
-                  <FontAwesomeIcon icon={faHeart} /> 12 Like
+                  <FontAwesomeIcon icon={faHeart} /> {data.likes.length} Like
                 </spanz>
               </div>
               <div className="action-item" onClick={commentHandler}>

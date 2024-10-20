@@ -43,38 +43,19 @@ const UserProfile = () => {
                   <h5>{user.username}</h5>
                 </div>
                 <div className="profile-button">
-                  {auth.currentUser.uid ? (
-                    <>
-                      <Link to={"/editProfile"}>
-                        <button className="btn btn-primary">
-                          Edit Profile
-                        </button>
-                      </Link>
-                      <Link>
-                        <button className="btn">
-                          Followers {" "}
-                          <span>333</span>
-                        </button>
-                      </Link>
-                      <Link>
-                        <button className="btn btn-primary">
-                          Following {" "}
-                          <span>33</span>
-                        </button>
-                      </Link>
-                    </>
-                  ) : (
-                    <>
-                      <Link to={`/chatbox/id`}>
-                        <button className="btn btn-primary">
-                          <FontAwesomeIcon icon={faMessage} /> Message
-                        </button>
-                      </Link>
-                      <button className="btn btn-primary">
-                        <FontAwesomeIcon icon={faFeed} /> Follow Me
-                      </button>
-                    </>
-                  )}
+                  <button className="btn">
+                    <p>{user.followers.length}</p>
+                    <h4>Followers</h4>
+                  </button>
+                  <button className="btn">
+                    <p>{user.following.length}</p>
+                    <h4>following</h4>
+                  </button>
+                </div>
+                <div className="profile-button">
+                  <Link to={"/editProfile"}>
+                    <button className="btn btn-primary">Edit Profile</button>
+                  </Link>
                 </div>
                 <p className="bio">{user.bio}</p>
               </div>

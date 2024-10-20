@@ -1,4 +1,3 @@
-import FriendRequest from "../Friends/FriendRequest";
 import Message from "../Message/Message";
 
 // Components...............
@@ -9,7 +8,6 @@ const RightBar = () => {
     <div className="rightBar">
       <div className="rightBar-container">
         <Message />
-        <FriendRequest />
       </div>
     </div>
   );

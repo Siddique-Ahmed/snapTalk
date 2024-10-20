@@ -15,6 +15,8 @@ import {
   collection,
   onSnapshot,
   serverTimestamp,
+  updateDoc,
+  doc
 } from "firebase/firestore";
 import { auth, db, storageDB } from "../../firebaseConfig/Firebase";
 import { toast } from "react-toastify";
@@ -50,6 +52,7 @@ const AddPost = () => {
     postBtn.innerHTML = "Posting...";
     postBtn.disabled = true;
 
+    // Initial Post Object (without postId)
     const postObj = {
       title: postTitle,
       postImg: null,
@@ -57,7 +60,6 @@ const AddPost = () => {
       createdAt: serverTimestamp(),
       uid: userID,
       likes: [],
-      likesCount: 0,
       userImg: data[0]?.profileImg,
       username: data[0]?.fullName,
     };
@@ -76,6 +78,7 @@ const AddPost = () => {
         resetButton(postBtn);
         return;
       }
+
       // Upload video if present
       if (postVideo) {
         const postVideoRef = ref(storageDB, `postVideo/${postVideo.name}`);
@@ -83,6 +86,7 @@ const AddPost = () => {
         const postVideoUrl = await getDownloadURL(videoSnapshot.ref);
         postObj.postVideo = postVideoUrl;
       }
+
       // Upload image if present
       if (postImg) {
         const postImgRef = ref(storageDB, `postImg/${postImg.name}`);
@@ -90,10 +94,14 @@ const AddPost = () => {
         const postImgUrl = await getDownloadURL(imgSnapshot.ref);
         postObj.postImg = postImgUrl;
       }
-      // Add post data in Firestore
-      await addDoc(collection(db, "posts"), postObj);
+
+      const docRef = await addDoc(collection(db, "posts"), postObj);
+
+      await updateDoc(doc(db, "posts", docRef.id), {
+        postId: docRef.id,
+      });
+
       toast.success("Post created successfully!");
-      // Reset the form after successful post
       resetForm(e);
     } catch (error) {
       toast.error("Error posting: " + error.message);
@@ -101,7 +109,6 @@ const AddPost = () => {
       resetButton(postBtn);
     }
   };
-  // Reset form inputs including file inputs
   const resetForm = (e) => {
     e.target[0].value = "";
     e.target[2].value = "";

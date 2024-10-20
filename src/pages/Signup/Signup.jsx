@@ -26,6 +26,8 @@ const Signup = () => {
       isActive: true,
       uid: null,
       bio: "",
+      followers: [],
+      following: [],
     };
 
     signupButton.innerText = "Loading....";
