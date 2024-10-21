@@ -10,9 +10,11 @@ import {
   faListDots,
   faShare,
 } from "@fortawesome/free-solid-svg-icons";
-import { auth } from "../../firebaseConfig/Firebase";
+import { auth, db } from "../../firebaseConfig/Firebase";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { doc } from "firebase/firestore";
+import { updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 
 dayjs.extend(relativeTime);
 
@@ -22,6 +24,24 @@ const Feed = ({ postData }) => {
 
   const commentHandler = () => {
     setOpenComment(!openComment);
+  };
+
+  // add likes in pos collection //
+  const addLikes = async (postId, data) => {
+    try {
+      const likeRef = doc(db, "posts", postId);
+      if (data.likes.includes(currentUser)) {
+        await updateDoc(likeRef, {
+          likes: arrayRemove(currentUser),
+        });
+      } else {
+        await updateDoc(likeRef, {
+          likes: arrayUnion(currentUser),
+        });
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   return (
@@ -67,9 +87,9 @@ const Feed = ({ postData }) => {
             </div>
             <div className="bottom-content">
               <div className="action-item">
-                <spanz>
+                <span onClick={() => addLikes(data.postId, data)}>
                   <FontAwesomeIcon icon={faHeart} /> {data.likes.length} Like
-                </spanz>
+                </span>
               </div>
               <div className="action-item" onClick={commentHandler}>
                 <span>

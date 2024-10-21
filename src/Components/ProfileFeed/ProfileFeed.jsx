@@ -12,14 +12,35 @@ import { useState } from "react";
 import usericon from "../../../public/img/user-dp.jpeg";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { updateDoc, arrayUnion, arrayRemove, doc } from "firebase/firestore";
+import { auth, db } from "../../firebaseConfig/Firebase";
 
 dayjs.extend(relativeTime);
 
 const ProfileFeed = ({ postData }) => {
   const [openComment, setOpenComment] = useState(false);
+  const currentUser = auth.currentUser.uid
 
   const commentHandler = () => {
     setOpenComment(!openComment);
+  };
+
+  // add likes in pos collection //
+  const addLikes = async (postId, data) => {
+    try {
+      const likeRef = doc(db, "posts", postId);
+      if (data.likes.includes(currentUser)) {
+        await updateDoc(likeRef, {
+          likes: arrayRemove(currentUser),
+        });
+      } else {
+        await updateDoc(likeRef, {
+          likes: arrayUnion(currentUser),
+        });
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   return (
@@ -35,7 +56,7 @@ const ProfileFeed = ({ postData }) => {
           <>
             <div key={ind} className="feed">
               <div className="top-content">
-                <Link to={`profile/${data.uid}`}>
+                <Link>
                   <div className="user">
                     <img src={data.userImg ? data.userImg : usericon} alt="" />
                     <div>
@@ -63,8 +84,8 @@ const ProfileFeed = ({ postData }) => {
               </div>
               <div className="bottom-content">
                 <div className="action-item">
-                  <span>
-                    <FontAwesomeIcon icon={faHeart} /> 14 Like
+                  <span onClick={() => addLikes(data.postId, data)}>
+                    <FontAwesomeIcon icon={faHeart} /> {data.likes.length} Like
                   </span>
                 </div>
                 <div onClick={commentHandler} className="action-item">
