@@ -1,4 +1,5 @@
 import "./feeds.css";
+import { useState } from "react";
 import userLogo from "../../../public/img/user-dp.jpeg";
 import { Link } from "react-router-dom";
 import Comments from "../Comments/Comments";
@@ -9,7 +10,7 @@ import {
   faListDots,
   faShare,
 } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { auth } from "../../firebaseConfig/Firebase";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 
@@ -17,7 +18,8 @@ dayjs.extend(relativeTime);
 
 const Feed = ({ postData }) => {
   const [openComment, setOpenComment] = useState(false);
-  
+  const currentUser = auth.currentUser.uid;
+
   const commentHandler = () => {
     setOpenComment(!openComment);
   };
@@ -35,7 +37,13 @@ const Feed = ({ postData }) => {
         return (
           <div key={ind} className="feed">
             <div className="top-content">
-              <Link to={`profile/${data.uid}`}>
+              <Link
+                to={`${
+                  data.uid === currentUser
+                    ? `profile/${data.uid}`
+                    : `otherprofile/${data.uid}`
+                }`}
+              >
                 <div className="user">
                   <img src={data.userImg ? data.userImg : userLogo} alt="" />
                   <div>
