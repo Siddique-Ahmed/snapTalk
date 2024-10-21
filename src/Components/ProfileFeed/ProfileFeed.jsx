@@ -85,7 +85,7 @@ const ProfileFeed = ({ postData }) => {
               <div className="bottom-content">
                 <div className="action-item">
                   <span onClick={() => addLikes(data.postId, data)}>
-                    <FontAwesomeIcon icon={faHeart} /> {data.likes.length} Like
+                    <FontAwesomeIcon className={data.likes.includes(currentUser) ? "likes" : ""} icon={faHeart} /> {data.likes.length} Like
                   </span>
                 </div>
                 <div onClick={commentHandler} className="action-item">
