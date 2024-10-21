@@ -12,14 +12,35 @@ import {
 import { useState } from "react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { arrayRemove, arrayUnion, doc, updateDoc } from "firebase/firestore";
+import { auth, db } from "../../firebaseConfig/Firebase";
 
 dayjs.extend(relativeTime);
 
 const OtherProfileFeed = ({ otherPost }) => {
   const [openComment, setOpenComment] = useState(false);
+  const currentUser = auth.currentUser.uid;
 
   const commentHandler = () => {
     setOpenComment(!openComment);
+  };
+
+  // add likes in firebase //
+  const addLikes = async (postId, data) => {
+    try {
+      const likesRef = doc(db, "posts", postId);
+      if (data.likes.includes(currentUser)) {
+        await updateDoc(likesRef, {
+          likes: arrayRemove(currentUser),
+        });
+      } else {
+        await updateDoc(likesRef, {
+          likes: arrayUnion(currentUser),
+        });
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   return (
@@ -32,7 +53,7 @@ const OtherProfileFeed = ({ otherPost }) => {
           postDate = new Date();
         }
         return (
-          <div className="feed">
+          <div key={ind} className="feed">
             <div className="top-content">
               <Link to={`profile/${post.uid}`}>
                 <div className="user">
@@ -66,9 +87,9 @@ const OtherProfileFeed = ({ otherPost }) => {
             </div>
             <div className="bottom-content">
               <div className="action-item">
-                <spanz>
-                  <FontAwesomeIcon icon={faHeart} /> 12 Like
-                </spanz>
+                <span onClick={() => addLikes(post.postId, post)}>
+                  <FontAwesomeIcon className={post.likes.includes(currentUser) ? "likes" : ""} icon={faHeart} /> {post.likes.length} Like
+                </span>
               </div>
               <div className="action-item" onClick={commentHandler}>
                 <span>

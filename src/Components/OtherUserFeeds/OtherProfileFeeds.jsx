@@ -1,7 +1,7 @@
 import "./otherprofilefeed.css";
 import OtherProfileFeed from "./OtherProfileFeed";
 import { useEffect, useState } from "react";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebaseConfig/Firebase";
 
 const OtherProfileFeeds = ({ id }) => {
@@ -26,18 +26,14 @@ const OtherProfileFeeds = ({ id }) => {
   }, []);
 
   useEffect(() => {
-    const fetchingPosts = async () => {
-      const postRef = collection(db, "posts");
-      const dataFetched = await getDocs(postRef);
-      const postArr = [];
-      dataFetched.forEach((data) => {
-        if (data.data().uid === id) {
-          postArr.push(data.data());
-        }
-      });
-      setpostData(postArr);
+    const unsubscribePosts = onSnapshot(collection(db, "posts"), (snapshot) => {
+      const dataArr = snapshot.docs.map((doc) => doc.data());
+      setpostData(dataArr);
+    });
+
+    return () => {
+      unsubscribePosts();
     };
-    fetchingPosts();
   }, []);
 
   return (
