@@ -86,11 +86,8 @@ const Nav = () => {
         {/*........................NavArea Right.........................*/}
 
         <div className="nav-right">
-          <Link to={"/chatbox/id"}>
+          <Link to={`/chatbox/${data[0]?.uid}`}>
             <FontAwesomeIcon icon={faEnvelope} />
-          </Link>
-          <Link to={"/"}>
-            <FontAwesomeIcon icon={faBell} />
           </Link>
           <DarkMood />
           <FontAwesomeIcon

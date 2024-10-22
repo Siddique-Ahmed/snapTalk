@@ -88,7 +88,7 @@ const OtherProfileFeed = ({ otherPost }) => {
             <div className="bottom-content">
               <div className="action-item">
                 <span onClick={() => addLikes(post.postId, post)}>
-                  <FontAwesomeIcon className={post.likes.includes(currentUser) ? "likes" : ""} icon={faHeart} /> {post.likes.length} Like
+                  <FontAwesomeIcon className={post?.likes.includes(currentUser) ? "likes" : ""} icon={faHeart} /> {post.likes.length} Like
                 </span>
               </div>
               <div className="action-item" onClick={commentHandler}>

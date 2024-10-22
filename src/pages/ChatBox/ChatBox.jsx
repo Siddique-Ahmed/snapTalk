@@ -24,7 +24,7 @@ const ChatBox = () => {
       try {
         const otherPostData = [];
         const docRef = doc(db, "users", id);
-        await getDoc(docRef).then((data) => {
+        await getDoc(docRef).then((data) => {          
           otherPostData.push(data.data());
         });
         setOthersData(otherPostData);
@@ -42,11 +42,11 @@ const ChatBox = () => {
       <div className="chat-box">
         {otherData.map((data, ind) => {
           return (
-            <div className="chat-box-top">
-              <img src={data.profileImg ? data.profileImg :userIcon} alt="" />
+            <div key={ind} className="chat-box-top">
+              <img src={data?.profileImg ? data.profileImg :userIcon} alt="" />
               <div className="user-name">
-                <h3>{data.fullName}</h3>
-                <h5>{data.username}</h5>
+                <h3>{data?.fullName}</h3>
+                <h5>{data?.username}</h5>
               </div>
             </div>
           );

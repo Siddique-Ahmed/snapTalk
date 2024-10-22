@@ -1,7 +1,15 @@
 import "./otherprofilefeed.css";
 import OtherProfileFeed from "./OtherProfileFeed";
 import { useEffect, useState } from "react";
-import { collection, doc, getDoc, getDocs, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
 import { db } from "../../firebaseConfig/Firebase";
 
 const OtherProfileFeeds = ({ id }) => {
@@ -26,7 +34,8 @@ const OtherProfileFeeds = ({ id }) => {
   }, []);
 
   useEffect(() => {
-    const unsubscribePosts = onSnapshot(collection(db, "posts"), (snapshot) => {
+    const q = query(collection(db, "posts"), where("uid", "==", id));
+    const unsubscribePosts = onSnapshot(q, (snapshot) => {
       const dataArr = snapshot.docs.map((doc) => doc.data());
       setpostData(dataArr);
     });

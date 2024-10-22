@@ -1,15 +1,15 @@
 import "./userprofile.css";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import userLogo from "../../../public/img/user-dp.jpeg";
 import bgCover from "../../../public/img/bg-cover.png";
 import { auth, db } from "../../firebaseConfig/Firebase";
 import { useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFeed, faLink, faMessage } from "@fortawesome/free-solid-svg-icons";
 import { doc, getDoc } from "firebase/firestore";
+import {moodChangeContext} from "../../Context/DarkMoodContext"
 
 const UserProfile = () => {
   const [data, setData] = useState([]);
+  
 
   // current user profile //
   useEffect(() => {
@@ -43,11 +43,11 @@ const UserProfile = () => {
                   <h5>{user.username}</h5>
                 </div>
                 <div className="profile-button">
-                  <button className="btn">
+                  <button className={`btn`}>
                     <p>{user.followers.length}</p>
                     <h4>Followers</h4>
                   </button>
-                  <button className="btn">
+                  <button className={`btn`}>
                     <p>{user.following.length}</p>
                     <h4>following</h4>
                   </button>
