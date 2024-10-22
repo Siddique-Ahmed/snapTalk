@@ -1,5 +1,5 @@
 import "./feeds.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import userLogo from "../../../public/img/user-dp.jpeg";
 import { Link } from "react-router-dom";
 import Comments from "../Comments/Comments";
@@ -13,18 +13,36 @@ import {
 import { auth, db } from "../../firebaseConfig/Firebase";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { doc } from "firebase/firestore";
+import { collection, doc, onSnapshot } from "firebase/firestore";
 import { updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 
 dayjs.extend(relativeTime);
 
 const Feed = ({ postData }) => {
   const [openComment, setOpenComment] = useState(false);
+  const [getComment, setGetComment] = useState([]);
   const currentUser = auth.currentUser.uid;
 
   const commentHandler = () => {
     setOpenComment(!openComment);
   };
+
+  useEffect(()=>{
+    const getCommentData = async()=>{
+      const dataArr = []
+      const commentRef = collection(db,"comments");
+      const querySnapShot = onSnapshot(commentRef,(snapShot)=>{
+        snapShot.forEach((data)=>{
+          dataArr.push(data.data());
+        })
+        setGetComment(dataArr)
+      })
+      return ()=>{
+        querySnapShot
+      }
+    }
+    getCommentData()
+  },[])
 
   // add likes in pos collection //
   const addLikes = async (postId, data) => {
@@ -93,7 +111,7 @@ const Feed = ({ postData }) => {
               </div>
               <div className="action-item" onClick={commentHandler}>
                 <span>
-                  <FontAwesomeIcon icon={faComment} /> 23 Comment
+                  <FontAwesomeIcon icon={faComment} /> {getComment.length } Comment
                 </span>
               </div>
               <div className="action-item">
@@ -102,7 +120,7 @@ const Feed = ({ postData }) => {
                 </span>
               </div>
             </div>
-            {openComment && <Comments />}
+            {openComment && <Comments postid={data.postId} />}
           </div>
         );
       })}
